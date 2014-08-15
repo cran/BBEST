@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">    
+    <style type="text/css">
+    <!--
+    body {
+      color:#000000;
+      background-color:#FFFFFF;
+      background-image:url('Background Image');
+      background-repeat:no-repeat;
+    }
+    a  { color:#0000FF; }
+    a:visited { color:#800080; }
+    a:hover { color:#008000; }
+    a:active { color:#FF0000; }
+    -->
+    </style>
+    <!--[if IE]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  
+  <h4><font color="#606060">Table of Contents</font></h4>
+  <h5>
+  <ol type="1">
+    <a href="#load"><li>Load data</li></a>
+    <a href="#prepare"><li>Set additional parameters</li></a>
+    <a href="#gr"><li>Set real-space condition</li></a>
+    <a href="#difev"><li>Optimize background with DifEv</li></a>
+    <a href="#fit"><li>Fit results</li></a>
+    <a href="#plot"><li>Plot options</li></a>
+  </ol> 
+  </h5>
+  <p></p>
+  <p></p>
+  </br>
+  
+  On the top of <i>Data Plot</i> inset you can see the "progress bar". Parameters, that are necessary to specify, are marked with red. Once indicated, they turn green. Optional parameters are marked with grey.  
+<p></p>
+  Hover mouse cursor over a plot to display coordinates of a corresponding point. Mouse click fixes this legend until the next click in a new place.
+<p></p>  
+  
+  <h4><a id="load"></a>1. Load data</h4>
+  <b>BBEST</b> supports <i>text</i> files, <i>.csv</i>-files, <i>.sqa</i>  and <i>.sqb</i>-files, returned by  <a href="http://pdfgetn.sourceforge.net/"><b>PDFgetN</b></a>, and <i>.RData</i> files that contain results of the previously made fits (as returned by <i>'Download fit results as .RData file'</i>). For text files data should be given in the following format <p></p>
+ 
+<div style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><table width="30%" border="0" cellpadding="1" cellspacing="1" style="background-color: #ffffff;">
+<tr valign="top">
+<td width="19" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">x</span></p>
+</td>
+<td width="19" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">y</span></p>
+</td>
+<td width="24" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">SB</span></p>
+</td>
+<td width="35" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">sigma</span></p>
+</td>
+<td width="35" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">lambda</span></p>
+</td>
+</tr>
+<tr valign="top">
+<td width="19" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">0</span></p>
+</td>
+<td width="19" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">2</span></p>
+</td>
+<td width="24" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">4</span></p>
+</td>
+<td width="35" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">6</span></p>
+</td>
+<td width="35" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">8</span></p>
+</td>
+</tr>
+<tr valign="top">
+<td width="19" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">1</span></p>
+</td>
+<td width="19" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">3</span></p>
+</td>
+<td width="24" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">5</span></p>
+</td>
+<td width="35" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">7</span></p>
+</td>
+<td width="35" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">9</span></p>
+</td>
+</tr>
+<tr valign="top">
+<td width="19" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">...</span></p>
+</td>
+<td width="19" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">...</span></p>
+</td>
+<td width="24" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">...</span></p>
+</td>
+<td width="35" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">...</span></p>
+</td>
+<td width="35" style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: normal; font-weight: normal; color: #000000; background-color: transparent; text-decoration: none;">...</span></p>
+</td>
+</tr>
+</table>
+</div>
+<p></p>
+Here SB (coherent baseline S<sub>B</sub>(Q)), sigma (noise level &epsilon;(Q)) and lambda (useful signal level) are the optional columns.
+<p></p>
+
+<p></p>
+<br/>
+  <h4><a id="prepare"></a>2. Set additional parameters</h4>
+  
+    <div style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><table width="100%" border="0" cellpadding="2" cellspacing="2" style="background-color: #ffffff;">
+    <col width="30%">
+    <col width="70%">
+    <tr valign="top">
+    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Truncate data</span></p>
+    </td>
+    <td style="border-width : 0px;">in some situations there is a necessity in removing the unwanted data. For example, low-x regions may contain incorrect estimations, and high-x regions may contain nothing but noise. In the case of neutron scattering experiments this may lead to the inaccuracy in Pair Distribution Function estimation. We recommend to narrow x-region to a reasonable boundaries.
+    </td>
+    </tr>
+    <tr valign="top">
+    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Useful signal level</span></p>
+    </td>
+    <td style="border-width : 0px;">the mean signal magnitude, lambda, is calculated as a linear piecewise function which is equal to lambda_0 outside the [x.min,x.max] region. Inside this region lambda is approximated by a line connecting points (x_1;lambda_1) and (x_2;lambda_2). This parameter does not require high accuracy. lambda can be thought as a function that will cross centres of the signal peaks after background subtraction. 
+    </td>
+    </tr>
+    <tr valign="top">
+    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Baseline</span></p>
+    </td>
+    <td style="border-width : 0px;">neutron scattering coherent baseline (SB) or any other baseline that shouldn't be subtracted from the experimental signal. For neutron total scattering experiments, SB can be calculated via <p></p>    
+    SB(Q)=1-(1-L)&Sigma;<sub>k</sub>N<sub>k</sub>f<sub>k</sub>exp(-1/2&sigma;<sub>kk</sub><sup>2</sup>Q<sup>2</sup>)/N&lt;f<sup>2</sup>&gt;,
+    <p></p>
+    where where N<sub>k</sub> is the number of atoms of type k per unit cell, f<sub>k</sub> is the scattering factor for the atom k, &lt;f<sup>2</sup>&gt; is the average of the scattering factor squared, &sigma;<sub>kk</sub><sup>2</sup> is the atomic displacement parameter (ADP), and L is the Laue term. If unknown, the APD(s) could be refined (to do this, real-space condition should be specified).
+    </td>
+    </tr>
+    <tr valign="top">
+    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Noise level</span></p>
+    </td>
+    <td style="border-width : 0px;">Although noise in diffraction experiments is per se Poisson, various corrections for background, absorption, multiple scattering, Plazcek and other effects can destroy its structure. We suggest considering the experimental uncertainty as having  Gaussian distribution with x-dependent amplitude. Splitting grid into n.regions segments and estimating Gaussian standard deviation over these segments allows us to approximate the true noise-distribution. Your can indicate number of regions to be used (x-range is then split into n.regions equal regions), or, if noise can be considered as uniform, provide bounds for the peak-free region. <b>BBEST</b> uses <b>aws</b> package that implements Propagation-Separation Approach to adaptive smoothing to estimate the noise level.
+    </td>
+    </tr>
+    </table>
+    </div>
+ 
+   
+   
+<p></p>
+<p></p>
+<br/>
+
+  
+  
+  
+  <h4><a id="gr"></a>3. Set real-space condition</h4>
+  For total scattering experiments a real-space pair distribution function (PDF or G(r)), obtained as the Fourier transform of the total scattering function S(Q), performs a linear (or quasi-linear) behaviour at distances smaller than the shortest interatomic distance in the material. Knowledge of the correct behavior of a PDF at low r can be used to constrain the optimization procedure.   
+  
+  <p></p>
+  
+    <div style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><table width="100%" border="0" cellpadding="2" cellspacing="2" style="background-color: #ffffff;">
+    <col width="30%">
+    <col width="70%">
+    <tr valign="top">
+    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Condition type</span></p>
+    </td>
+    <td style="border-width : 0px;">either 'Gaussian noise' or 'Correlated noise'. The r-space noise can be considered as independent or correlated Gaussian. For better computational stability we recommend to use 'Gaussian noise' option.</td>
+    </tr>
+    <tr valign="top">
+    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Number density of the material &rho;<sub>0</sub> </span></p>
+    </td>
+    <td style="border-width : 0px;">atomic number density of the material. By definition is a number of atoms per unit cell divided by a volume of a unit cell.</td>
+    </tr>
+    <tr valign="top">
+    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">min(r), max(r), dr</span></p>
+    </td>
+    <td style="border-width : 0px;">bounds and spacing for the grid on which the PDF behaviour is controlled.</td>
+    </tr>
+    </table>
+    </div>
+ <p></p>
+Use this function only after noise level <b>&epsilon;</b> is estimated.
+<p></p>
+<p></p>
+<br/>
+  
+ <h4><a id="difev"></a>4. Optimize background with DifEv</h4>
+  The posterior maximization is performed using the Differential Evolution Algorithm (DEA; <a href="http://www.springer.com/mathematics/book/978-3-540-20950-8">Price et al., 2005</a>)  implemented in the <b>DEoptim</b> package.
+  <p></p>
+  Before starting fit, indicate the following parameters:  
+  <p></p>
+    <div style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><table width="100%" border="0" cellpadding="2" cellspacing="2" style="background-color: #ffffff;">
+    <col width="30%">
+    <col width="70%">
+    <tr valign="top">
+    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Number of population members</span></p>
+    </td>
+    <td style="border-width : 0px;">NP, number of population members. For many problems it is best to set NP to be at least 10 times the length of the parameter vector (which includes spline knot positions, and, optionally, normalization and ADP parameters). 
+    </td>
+    </tr>
+    <tr valign="top">
+    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Number of iterations</span></p>
+    </td>
+    <td style="border-width : 0px;">itermax, the maximum iteration (population generation) allowed.
+    </td>
+    </tr>
+    <tr valign="top">
+    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Crossover probability (CR)</span></p>
+    </td>
+    <td style="border-width : 0px;">crossover probability from interval [0,1]. The crossover probability CR controls the fraction of the parameter values that are copied from the mutant.
+    </td>
+    </tr>
+    <tr valign="top">
+    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Differential weighting factor (F)</span></p>
+    </td>
+    <td style="border-width : 0px;">differential weighting factor from interval [0,2]. Effective values are typically less than one.
+    </td>
+    </tr>
+    <tr valign="top">
+    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Lower and upper bounds for scale factor fit</span></p>
+    </td>
+    <td style="border-width : 0px;"> bounds for normalization parameter. If no normalization is needed, use the default value '1, 1'</td>
+    </tr>
+    <tr valign="top">
+    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Lower and upper bounds for background</span></p>
+    </td>
+    <td style="border-width : 0px;">estimation for the background minimum and maximum values. For faster convergence it is better to estimate minimum lower and maximum higher than real minimum and maximum values, respectively.
+    </td>
+    </tr>
+    <tr valign="top">
+    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Fit background with</span></p>
+    </td>
+    <td style="border-width : 0px;">for the case of fitting of individual-bank data we recommend using an analytical function. For a (blended) total scattering function we recommend using splines. Uncertainty interval estimation in unavailable for the analytical backgrounds.</td>
+    </tr>
+    <tr valign="top">
+    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Number of splines or spline knot positions</span></p>
+    </td>
+    <td style="border-width : 0px;">a single integer number (N) will specify number of spline functions to be used (N equidistant knots will be generated). To set specific knot positions, enter numbers divided by commas. Put more knots in the region where background demonstrates oscillative behaviour. </td>
+    </tr>
+
+    </table>
+    </div>
+
+<p></p>
+<p></p>
+<br/>
+
+ <h4> <a id="fit"></a>5. Fit results</h4>
+  This inset allows to download fit results in a text format, as a correction .fix file for <b>PDFgetN</b>, or as a binary file that contains <b>R</b>-objects. The PDF could be calculated on a specified grid and downloaded as well. To see corresponding plots select <i>'Fit Results Plot'</i> tab on the top tab panel.
+  <p></p>
+  The iterative algorithm is available if fit was performed using G(r)-corrected Bayesian model and background function was expanded in terms of splines. It includes the following steps: 
+  <p></p>
+  <ol type="1">
+    <li>Estimation of the background using Q-space Bayesian models</li>
+    <li>Calculation of the difference between the G(r) obtained using the two models for r&lt;1&#8491;</li>
+    <li>Conversion of this difference to Q-space and adding it to the estimate of baseline SB</li>    
+    <li>Minimization of the target function for the new G(r)-corrected model</li>    
+  </ol> 
+  The first and fourth steps can be performed using either Gradient Descent Algorithm (GDA) or DEA. GDA could be faster but tends to converge to a local minimum. DEA, while a slow procedure, solves the global optimization task. The control parameters for DEA will be used same as for the initial fit. 
+<br/>
+
+ <h4> <a id="plot"></a>6. Plot options</h4>
+    You can set here x- and y-axis limits of a graph. If this option was used, the truncation procedure will not further automatically rescale data plot. Note, that choosing plot name from the select list does not render plot on the right panel. To do that, select the corresponding inset on the top. 
+
+  </body>
+</html>
