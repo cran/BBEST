@@ -43,7 +43,11 @@ y <- y + rnorm(sd=0.05+x/240, n=length(x))
 
 # estimating noise
 dat <- list(x=x, y=y)
-dat <- set.sigma(dat, n.regions=5)
+dat <- set.sigma(dat, n.regions=1)
+# use
+# dat <- set.sigma(dat, n.regions=5)
+# to see the difference
+
 
 # Plotting results: noisy function and a
 # smoothed estimate +/- 2 standard deviations

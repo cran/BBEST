@@ -1,4 +1,4 @@
-ba25dc5fb83650607395b287dc9c5bfc *DESCRIPTION
+f41868ad8306a32d8a4f11f0ff43150b *DESCRIPTION
 e33e1d608a732958cc18e0018e925d8b *NAMESPACE
 e711c9862a7d3adf83c7556c806addcb *R/bayesian.R
 fedafad0ee2230a589e076b3d43489cc *R/fits.R
@@ -9,8 +9,10 @@ c792d47e867b4d50b75b70edd2a28e2b *R/progress.R
 58f56bdd2abf7c477c77d7f60c38450c *R/r-space.R
 b036e23bc15c3e4694ffd84df57cf1e9 *R/specified.R
 b7619ef2edd7903f39674c9c66c85754 *R/uncertainty.R
-4195cc7e9e16e5cf88b47d87cccbbb02 *README.md
+3378579763ff3deec62617af408f3b99 *README.md
 de651f42b336d1c97eb377c165e14601 *inst/CITATION
+072b488cee7ab0238e013d7d7d58ce19 *inst/extdata/npdf_07275.sqa.txt
+9e0c82eee32194218572dff0b3016b17 *inst/extdata/npdf_07275.sqb.txt
 7aca3fd32223133d8f8819ba32f1dfe2 *inst/gui/help/help.html
 49d264f1a24fd7f7389f3b82a4d567c4 *inst/gui/server.R
 97e1a19edf0cd11a5982be6d6be88e95 *inst/gui/ui.R
@@ -36,7 +38,7 @@ a92e522a47cfb80558e546bbb7dd168b *man/set.SB.Rd
 a25333f8124e6e04bc98cab790f990ea *man/set.control.Rd
 3bf467583f81a3597d15bb8e73170397 *man/set.data.Rd
 93b6ba7e45f198c470a8d7e849d6d93e *man/set.lambda.Rd
-b81edeeee31588573c4cd7c0dee3b13a *man/set.sigma.Rd
+024defbada46ccbb40a9b8ac8952375b *man/set.sigma.Rd
 883723d63a71d96bffb7eb04a467bd54 *man/test.signal.Rd
 f6cd3a2335802132e97b6f92e9d437eb *man/trim.data.Rd
 f48bab788b3019304e92192e6284500e *man/write.fit.results.Rd

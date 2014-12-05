@@ -51,4 +51,10 @@ To start a simple command-line guide, type
 guide()
 ```
 
+## Example
 
+The package contains experimental data for `Li5La3Nb2O12` bulk ceramics (see [Gagin A. & Levin I. (2014). *J. Appl. Cryst.* **47**, 2060-2068.](http://journals.iucr.org/j/issues/2014/06/00/po5021/)). The corresponding [*PDFgetN*](http://pdfgetn.sourceforge.net/) output files can be found at
+
+`"Path_to_your_R-library/extdata"`
+
+To use these files with 'BBEST', delete the ".txt" extensions at the end of the filenames.
