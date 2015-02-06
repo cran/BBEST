@@ -123,7 +123,14 @@ shinyUI(fluidPage(
               strong("Noise level"),
               textInput("sigma", label = c("Type number of regions or bounds for a signal-free region"),  value = ""),
               p(style="margin:0; padding:0;"),
-              actionButton("calcSigmaButton", label = "Estimate noise")
+              actionButton("calcSigmaButton", label = "Estimate noise"),
+              p(),              
+##     P.BKG    
+              strong("P(bkg)"),
+              numericInput("pbkg", min=-1, max=1, step=0.01,
+                label = "Type probability that data points contain no signal contribution (only background). Type '-1' to estimate P(bkg) iteratively",
+                value = 0.5)          
+              
             ),
 
 

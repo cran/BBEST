@@ -112,6 +112,7 @@ get.hess <- function(data, knots.x, knots.y, Gr=NA, r=seq(0, 2, 0.01), p.bkg=0.5
   cov.diag.r[which(cov.diag.r<0)]<-0
   stdev.r <- sqrt(cov.diag.r)
 
+#  return(list(stdev=stdev, stdev.r=stdev.r, hess=hess, cov.matrix=hess.inv, cov.matrix.r=cov.r, hess.gg=hess.gg, H=H))
   return(list(stdev=stdev, stdev.r=stdev.r, hess=hess, cov.matrix=hess.inv, cov.matrix.r=cov.r, hess.gg=hess.gg))
 
 

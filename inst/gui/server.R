@@ -511,6 +511,7 @@ shinyServer(function(input, output, session) {
       F <- input$fitF
       NP <- input$fitNP
       itermax <- input$fitItermax
+      p.bkg <- input$pbkg
       ctrl <- set.control(CR=CR, F=F, NP=NP, itermax=itermax, parallelType=1)
 
       bounds <- as.numeric(unlist(strsplit(input$bkgBounds, ",")))
@@ -543,7 +544,7 @@ shinyServer(function(input, output, session) {
         analyt <- {input$fitWith=='fitWith.analyt'}
         vals$fitRes[[i]] <- do.fit(dat, bounds.lower=bounds[1], bounds.upper=bounds[2], 
                         scale=scale, knots.x=knots.x, knots.n=knots.n, analytical=analyt, 
-                        stdev=TRUE, control=ctrl, p.bkg=.5, save.to="")
+                        stdev=TRUE, control=ctrl, p.bkg=p.bkg, save.to="")
       }
       progress$set(message = 'Calculating, please wait...', value = 0.999)  
       vals$fitResFinal <- list(list())

@@ -151,9 +151,32 @@ do.fit <- function(data, bounds.lower, bounds.upper, scale=c(1,1), knots.x=NA,
 #  }
 #  DE.control$initialpop=cc
   cat("Starting DifEv algorithm... \n")
+  doPbkgIter <- FALSE
+  if(p.bkg==-1){
+    doPbkgIter <- TRUE
+    p.bkg <- 0.02
+  }    
   DEoptim.fit <- DEoptim(get.posterior, lower = bounds.lower, upper = bounds.upper, 
                          control= DE.control, skel=iter.0, data=data, 
                          knots.x=knots.x, Gr=Gr, p.bkg=p.bkg)
+  if(doPbkgIter){
+    cat("\n\n P.bkg iteration... \n\n")
+    if(analytical==TRUE){
+      pars <- DEoptim.fit$optim$bestmem[1:6]
+      bkg <- bkg.analyt(pars=pars, x=data$x)
+    } 
+    else{	
+      knots.y <- DEoptim.fit$optim$bestmem[1:knots.n]
+      bkg <- get.bkg(x=data$x, knots.x=knots.x, knots.y=knots.y)  
+    }
+    dev.norm <- (data$y-bkg-data$SB)/data$sigma
+    p.bkg <- 0.5*50^((1-dev.norm^2)/8)
+    
+    DEoptim.fit <- DEoptim(get.posterior, lower = bounds.lower, upper = bounds.upper, 
+                         control= DE.control, skel=iter.0, data=data, 
+                         knots.x=knots.x, Gr=Gr, p.bkg=p.bkg)       
+  }
+  
 	if(analytical==TRUE){
     pars <- DEoptim.fit$optim$bestmem[1:6]
     bkg <- bkg.analyt(pars=pars, x=data$x)

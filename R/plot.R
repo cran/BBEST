@@ -132,7 +132,8 @@ mPlot.results <- function(fit.results, label.x="x", label.y="y", xlim=NA, ylim=N
 	    dat$y <- dat$y + fit.results$curves$corr
 	  fit.results$uncrt <- get.hess(dat, fit.results$knots$x, fit.results$knots$y, Gr=NA, r=seq(0, 2, 0.01), p.bkg=.5)
 	}
-  else{
+  
+  if(!is.na(fit.results$pars)){
     fit.results$uncrt <- list()  
     fit.results$uncrt$stdev <- rep(0, length(fit.results$x))
   }
@@ -156,8 +157,8 @@ mPlot.results <- function(fit.results, label.x="x", label.y="y", xlim=NA, ylim=N
 	knots <- data.frame(x=fit.results$knots$x, y=fit.results$knots$y)
 	p1<- (h <- ggplot2::ggplot(melted.curves, aes(x=x, y=value))
      + geom_line(aes(colour=variable, group=variable)) 
-     + geom_ribbon(data=ribbon, aes(ymin=bkg-2*stdev, ymax=bkg+2*stdev, y=bkg), fill = "brown", alpha=0.5)
      + scale_color_manual(name="Plot legend", values = c("black", "red", "brown"), labels = c("experimental data", "background guess (+/-2sd)", "uncertainty interval"))
+     + geom_ribbon(data=ribbon, aes(ymin=bkg-2*stdev, ymax=bkg+2*stdev, y=bkg), fill = "brown", alpha=0.5)
      + geom_point(data=knots, aes(x=x, y=y), colour="red", size=2)
      + xlab(label.x) 
      + ylab(label.y) 
@@ -165,6 +166,7 @@ mPlot.results <- function(fit.results, label.x="x", label.y="y", xlim=NA, ylim=N
      + ylim(ylim)
      + ggtitle("Background Estimation")
 	)
+#  print(p1)
 
 	curves2 <- data.frame(x = fit.results$x, signal = fit.results$curves$y-fit.results$curves$bkg, SB=fit.results$curves$SB)
 	melted.curves2 <- reshape2::melt(curves2, id.vars="x")
