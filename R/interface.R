@@ -22,6 +22,22 @@ runUI <- function()
 #
 
 read.sqa <- function(file = stop("'file' must be specified")){
+  
+  sqa <- scan(file=file, what="list", sep="\n")
+  N <- length(sqa)
+  
+  i.start <- 0
+  nBanks <- 0
+  for(i in 1:N){
+    if(strsplit(sqa[i], split=" ")[[1]][1]=="#L"){
+	    i.start[nBanks+1] <- i+1 
+      nBanks <- nBanks + 1 
+    }
+  }
+  ids <- 0
+  for(i in 1:nBanks)
+    ids[i] <- strsplit(sqa[i.start[i]-4], split = " ")[[1]][4]  
+  
   dat <- read.table(file=file, header=FALSE, col.names=c("x", "y", "e1", "e2", "e3"))
   res <- list()
     
@@ -30,19 +46,21 @@ read.sqa <- function(file = stop("'file' must be specified")){
   for(i in 2:length(dat$x)){
     if(dat$x[i] < dat$x[i-1]){
   	  res[[bank]] <- list()
-	  class(res[[bank]]) <- "data"
-	  res[[bank]]$x <- dat$x[i.start:(i-1)]
-	  res[[bank]]$y <- dat$y[i.start:(i-1)]
+      class(res[[bank]]) <- "data"
+      res[[bank]]$x <- dat$x[i.start:(i-1)]
+      res[[bank]]$y <- dat$y[i.start:(i-1)]
       res[[bank]]$SB <- rep(0, length(res[[bank]]$x))
-	  bank <- bank + 1 
-	  i.start <- i	
-	}
+      res[[bank]]$id <- ids[bank]
+      bank <- bank + 1 
+      i.start <- i	
+	  }
   }
   res[[bank]] <- list()
   class(res[[bank]]) <- "data"
   res[[bank]]$x <- dat$x[i.start:length(dat$x)]
   res[[bank]]$y <- dat$y[i.start:length(dat$x)]
   res[[bank]]$SB <- rep(0, length(res[[bank]]$x))
+  res[[bank]]$id <- ids[bank]
   
   return(res)
 }
@@ -66,15 +84,14 @@ prepare.banks.data <- function(data, n.banks=4, lambda_1, lambda_2, lambda_0, x_
 write.fix <- function(fit.results, file = stop("'file' must be specified")){
 
   N <- length(fit.results)
-  if(N>=5){
+  if(!is.null(fit.results$fit.details)){
     fit.results <- list(fit.results)
-	N <- 1
+  	N <- 1
   }
-	
   options(warn=-1)
   for(i in 1:N){
     if(i==1) apnd <- FALSE else apnd <- TRUE 
-    write(c(paste("#S ",i," Correction File for Bank ",i,sep=""), "#L Q MULT ADD"), file=file, append=apnd)
+    write(c(paste("#S ",i," Correction File for Bank ",fit.results[[i]]$fit.details$id,sep=""), "#L Q MULT ADD"), file=file, append=apnd)
 	res <- cbind(fit.results[[i]]$x, rep(1,length(fit.results[[i]]$x)), -fit.results[[i]]$curves$bkg)
     write.table(res, file=file, append=TRUE, col.names=FALSE, row.names=FALSE, quote=FALSE, sep="\t")  
   }
@@ -156,6 +173,7 @@ trim.data <- function(data, x.min, x.max){
   if(!is.null(data$sigma)) dat$sigma <- data$sigma[cut]  else dat$sigma <- rep(NA, length(dat$x))
   if(!is.null(data$lambda)) dat$lambda <- data$lambda[cut]  else dat$lambda <- rep(NA, length(dat$x))
   if(!is.null(data$smoothed)) dat$smoothed <- data$smoothed[cut]  else dat$smoothed <- rep(NA, length(dat$x))
+  if(!is.null(data$id)) dat$id <- data$id  
   	  
   return(dat)  
 }
@@ -368,4 +386,49 @@ write.fit.results <- function(fit.results, file = stop("'file' must be specified
   cat("# columns: x; (scaled) corrected y; standard deviation in y due to noise and bkg uncertainty; coherent baseline; estimated background; raw data \n", file=file, append=TRUE)
   write.table(res, file=file, append=TRUE, col.names=TRUE, row.names=FALSE, quote=FALSE, sep="\t")
   options(warn=0)
+}
+
+
+sqa.split <- function(file = stop("'file' must be specified")){
+  sqa <- scan(file=file, what="list", sep="\n")
+  N <- length(sqa)
+  
+  i.start <- 0
+  nBanks <- 0
+  for(i in 1:N){
+    if(strsplit(sqa[i], split=" ")[[1]][1]=="#L"){
+	    i.start[nBanks+1] <- i+1 
+      nBanks <- nBanks + 1 
+    }
+  }
+  i.start[nBanks+1] <- length(sqa)+5
+  
+  name <- 0
+  for(i in 1:nBanks){
+    name <- strsplit(file, '[.]')[[1]]
+    name <- paste(name[-length(name)], collapse = '.')
+    name <- paste(name, "_b", i, ".sqa", sep="") 
+    writeLines(sqa[ (i.start[i]-4):(i.start[i+1]-5)], con = name, sep = "\n", useBytes = FALSE)  
+  }
+  
+}
+
+
+fix.merge <- function(outfile, infile1, infile2, ...){
+  files <- list(infile1, infile2, ...)
+  N <- length(files)
+  
+  file_tmp <- scan(file=infile1, what="list", sep="\n")
+  name_str_arr <- strsplit(file_tmp[1], split = " ")[[1]]
+  name_str_arr[2] <- 1
+  file_tmp[1] <- paste(name_str_arr, collapse = ' ') 
+  
+  writeLines(file_tmp, con = outfile, sep = "\n", useBytes = FALSE) 
+  for(i in 2:N){
+    file_tmp <- scan(file=files[[i]], what="list", sep="\n")
+    name_str_arr <- strsplit(file_tmp[1], split = " ")[[1]]
+    name_str_arr[2] <- i
+    file_tmp[1] <- paste(name_str_arr, collapse = ' ') 
+    write(file_tmp, file = outfile, sep = "\n", append=TRUE) 
+  }
 }

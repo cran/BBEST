@@ -211,7 +211,7 @@ do.fit <- function(data, bounds.lower, bounds.upper, scale=c(1,1), knots.x=NA,
   knots <- list(x=knots.x, y=knots.y)
   fit.details <- list(lambda=data$lambda, sigma=data$sigma, knots.n=knots.n, 
                       control=control, Gr=data$Gr, n.atoms=data$fitADP$n.atoms, 
-                      scatter.length=data$fitADP$scatter.length, 
+                      scatter.length=data$fitADP$scatter.length, id=data$id,
                       bounds.lower=bounds.lower['knots.y1'],  
                       bounds.upper=bounds.upper['knots.y1'])
   fit.results <- list(x=data$x, curves=curves, uncrt=stdev, knots=knots, 
@@ -247,15 +247,17 @@ do.fit.banks <- function(data, bounds.lower, bounds.upper, knots.n.left=NA,
   knots.x <- NA
   for(i in 1:N){
     cat("\n\n ===================================\n\n")
+    
     cat("Fitting bank # ",i,"\n\n")
     x <- data[[i]]$x
-	if(analytical==FALSE){
-      dx <- ((max(x)-x.boundary)/(knots.n.right-1) +  x.boundary/(knots.n.left-1) )/2
-      knots.x <- seq(0, x.boundary, length=knots.n.left)
-      knots.x <- c(knots.x, seq(x.boundary+dx, max(x), length=knots.n.right))
-	}
+    if(analytical==FALSE){
+        dx <- ((max(x)-x.boundary)/(knots.n.right-1) +  x.boundary/(knots.n.left-1) )/2
+        knots.x <- seq(0, x.boundary, length=knots.n.left)
+        knots.x <- c(knots.x, seq(x.boundary+dx, max(x), length=knots.n.right))
+    }
     fit.res[[i]] <- do.fit(data[[i]], bounds.lower, bounds.upper, knots.x=knots.x,
-        analytical=analytical, stdev=FALSE, control=control, save.to="")  
+        analytical=analytical, stdev=FALSE, control=control, save.to="")
+    fit.res[[i]]$fit.details$id <- data[[i]]$id     
   }
   
   if(save.to!=""){

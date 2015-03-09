@@ -70,7 +70,7 @@ shinyServer(function(input, output, session) {
 ##   fitResFinal = fitIter, if exists; fitRes, if not.
 ##                 helps to leave fitRes untouched               
 
-  vals <- reactiveValues(dat=list(list()), nB=1, 
+  vals <- reactiveValues(dat=list(list()), XInit=list(), nB=1, 
                          Gr=list(), datGr=list(list()), 
                          fitRes=list(list()), fitResIter=list(list()),
                          fitResFinal=list(list()),
@@ -123,6 +123,7 @@ shinyServer(function(input, output, session) {
         }
       }
       vals$xlim <- vals$ylim <- matrix(NA, nrow=vals$nB, ncol=2)
+      for(i in 1:vals$nB) vals$XInit[[i]] <- vals$dat[[i]]$x
     })
   })
   
@@ -536,7 +537,7 @@ shinyServer(function(input, output, session) {
       for(i in 1:vals$nB){
         dat <- list(x=vals$dat[[i]]$x, y=vals$dat[[i]]$y, SB=vals$dat[[i]]$SB, 
                     sigma=vals$dat[[i]]$sigma, lambda=vals$dat[[i]]$lambda, 
-                    Gr=Gr, fitADP=vals$dat[[i]]$fitADP) 
+                    Gr=Gr, fitADP=vals$dat[[i]]$fitADP, id=vals$dat[[i]]$id) 
         if(vals$nB>1) 
           progress$set(message = mess, value = (i/vals$nB-0.01))
         else
@@ -601,7 +602,7 @@ shinyServer(function(input, output, session) {
 ###############################
 ## DOWNLOAD FIX BUTTON
   output$downloadFixR <- renderUI({
-    if( (length(vals$fitRes[[1]]) > 1) && (vals$nB > 1) )
+    if( (length(vals$fitRes[[1]]) > 1) && (vals$nB >= 1) )
       return(downloadButton('downloadFix', HTML(paste("Download .fix file for", em("PDFgetN")))))
     else
       return(NULL)
@@ -609,7 +610,16 @@ shinyServer(function(input, output, session) {
 ####################################
 ## DOWNLOAD TO FIX FILE!
   output$downloadFix <- downloadHandler(filename = function() { paste('corrections', '.fix', sep='') }, content = function(file) {
-      fit.res <- vals$fitRes    
+      fit.res <- vals$fitRes
+      for(i in 1:vals$nB){
+        N <- length(fit.res[[i]]$x)
+        NInit <- length(vals$XInit[[i]])
+        if(N < NInit){
+           fit.res[[i]]$x <- vals$XInit[[i]]
+           fit.res[[i]]$curves$bkg <- c(fit.res[[i]]$curves$bkg, rep(0, NInit-N))
+        }      
+      }
+      
       write.fix(fit.res, file = "fix.tmp")
       writeLines(readLines("fix.tmp"), file)
       file.remove("fix.tmp")

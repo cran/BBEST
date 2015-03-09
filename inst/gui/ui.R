@@ -219,6 +219,7 @@ shinyUI(fluidPage(
               uiOutput("downloadRDataR"),
               p(),
               uiOutput("downloadFitResAsTxtR"),
+              p(),
               uiOutput("downloadFixR"),
               p(),
               br(),
