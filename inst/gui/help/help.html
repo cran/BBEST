@@ -131,7 +131,7 @@ Here SB (coherent baseline S<sub>B</sub>(Q)), sigma (noise level &epsilon;(Q)) a
     <tr valign="top">
     <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Noise level</span></p>
     </td>
-    <td style="border-width : 0px;">Although noise in diffraction experiments is per se Poisson, various corrections for background, absorption, multiple scattering, Plazcek and other effects can destroy its structure. We suggest considering the experimental uncertainty as having  Gaussian distribution with x-dependent amplitude. Splitting grid into n.regions segments and estimating Gaussian standard deviation over these segments allows us to approximate the true noise-distribution. Your can indicate number of regions to be used (x-range is then split into n.regions equal regions), or, if noise can be considered as uniform, provide bounds for the peak-free region. <b>BBEST</b> uses <b>aws</b> package that implements Propagation-Separation Approach to adaptive smoothing to estimate the noise level.
+    <td style="border-width : 0px;">Although noise in diffraction experiments is per se Poisson, various corrections for background, absorption, multiple scattering, Plazcek and other effects can destroy its structure. We suggest considering the experimental uncertainty as having  Gaussian distribution with x-dependent amplitude. Splitting grid into n.regions segments and estimating Gaussian standard deviation over these segments allows us to approximate the true noise-distribution. Your can indicate number of regions to be used (x-range is then split into n.regions equal regions), or, if noise can be considered as uniform, provide bounds for the peak-free region. <b>BBEST</b> uses <b>wmtsa</b> package that implements decimated discrete wavelet transform for signal smoothing to estimate the noise level. "thresh.scale" argument can be used to tweak the threshold levels to obtain a smoother or rougher result. Indicate a single value or <number of regions> values, divided by commas.
     </td>
     </tr>
     <tr valign="top">
@@ -140,6 +140,12 @@ Here SB (coherent baseline S<sub>B</sub>(Q)), sigma (noise level &epsilon;(Q)) a
     <td style="border-width : 0px;">A probability that a single datapoint contains contributions from background and noise only. Correspondingly, <b>(1-P(bkg))</b> is a probability that a datapoint contains also signal contribution. <b>P(bkg)</b> can be thought as a <i>(total length of areas that contain only background)/(total x-scale area)</i>. If overestimated or underestimated, the background may be overestimated or underestimated, respectively. If you see that the estimated backround possesses both unwanted properties (overestimated in one region and underestimated in the other), try using the iterative procedure. It will estimate <b>P(bkg)</b> at each point separetly (taking twice time for the fit).
     </td>
     </tr>    
+    <tr valign="top">
+    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">G(r)</span></p>
+    </td>
+    <td style="border-width : 0px;"> To calculate and plot G(r) prior to background estimation, indicate bounds and spacing for the r-grid and press "Plot G(r)".
+    </td>
+    </tr>      
     </table>
     </div>
  

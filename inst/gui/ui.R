@@ -78,7 +78,7 @@ shinyUI(fluidPage(
               h3("Load Data"),
               p(),
               fileInput('datafile', strong('Choose RData, CSV, text, .sqa or .sqb file'),
-                accept=c('text/csv', 'text/comma-separated-values,text/plain', '.csv', '.sqa', '.sqb', '.RData')),
+                accept=c('text/csv', 'text/comma-separated-values,text/plain', '.csv', '.sqa', '.sqb', '.sq', '.RData')),
               p(),
               checkboxInput('headerCB', strong('Data include header'), TRUE),
               p(),
@@ -88,7 +88,9 @@ shinyUI(fluidPage(
                   Tab='\t',
                   Space=' '),
                 selected='\t'
-              )
+              ),
+              p(),
+              uiOutput("sqaSplit")
             ),
 ##   = PREPARE DATA =
             conditionalPanel(
@@ -122,6 +124,7 @@ shinyUI(fluidPage(
 ##     NOISE
               strong("Noise level"),
               textInput("sigma", label = c("Type number of regions or bounds for a signal-free region"),  value = ""),
+              textInput("sigmaTS", label = c("Type threshold scale (degree of smoothing)"),  value = "1"),
               p(style="margin:0; padding:0;"),
               actionButton("calcSigmaButton", label = "Estimate noise"),
               p(),              
@@ -129,7 +132,18 @@ shinyUI(fluidPage(
               strong("P(bkg)"),
               numericInput("pbkg", min=-1, max=1, step=0.01,
                 label = "Type probability that data points contain no signal contribution (only background). Type '-1' to estimate P(bkg) iteratively",
-                value = 0.5)          
+                value = 0.5),
+              p(),
+##     G(R) PLOT    
+              strong("G(r)"),
+              checkboxInput("estGr", "Estimate PDF"),
+              conditionalPanel(
+                condition = "input.estGr == true",
+                textInput("rGrid", label = c("Type minimum r, maximum r, grid spacing dr"), value = ""),
+                p(style="margin:0; padding:0;"),
+                actionButton("plotPrelimGr", label = "Plot G(r)")                
+              )              
+              
               
             ),
 
@@ -223,6 +237,12 @@ shinyUI(fluidPage(
               uiOutput("downloadFixR"),
               p(),
               br(),
+#              uiOutput("messageFixR"),
+#              p(),
+              uiOutput("selectFixR"),
+              uiOutput("appendFixR"),
+              p(),              
+              br(),
               uiOutput("outHeaderGr"),
               p(),
               uiOutput("rminCalcGrR"),
@@ -260,7 +280,10 @@ shinyUI(fluidPage(
               uiOutput("plotLimXR"),
               p(),
               uiOutput("plotLimYR"),
-              p()
+              p(),
+              actionButton("rescaleY", label = strong("rescale Y slider")),
+              actionButton("resetY", label = strong("reset Y slider"))
+              
             )
           )
         )
@@ -281,7 +304,9 @@ shinyUI(fluidPage(
                     ), 
                  plotOutput("dataPlot", clickId="mainClick", hoverId="mainHover", hoverDelay=50, hoverDelayType="debounce", width='750px'),
                  plotOutput("legendPlot", height="20px", width='750px'),
-                 uiOutput('downloadMainPlotR')),
+                 uiOutput('downloadMainPlotR'),
+                 plotOutput("prelimGrPlot"),
+                 uiOutput('downloadestGrPlotR')),
         tabPanel("Data Table",  
                  downloadButton('downloadData', 'Download'), tags$hr(), 
                  tableOutput('datatable')),

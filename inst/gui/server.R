@@ -5,7 +5,7 @@
 ##########################################################################################
 options(shiny.maxRequestSize=30*1024^2)
 library(shiny)
-##  MODULE STRUCTURE:
+##  MODULE STRUCTURE: (OLD...)
 ##
 ##  LOAD DATA
 ##    READ DATA              [[depends on: vals$nB; changes: vals$dat]]
@@ -71,10 +71,10 @@ shinyServer(function(input, output, session) {
 ##                 helps to leave fitRes untouched               
 
   vals <- reactiveValues(dat=list(list()), XInit=list(), nB=1, 
-                         Gr=list(), datGr=list(list()), 
+                         Gr=list(), estGr=list(), datGr=list(list()), 
                          fitRes=list(list()), fitResIter=list(list()),
                          fitResFinal=list(list()),
-                         xlim=NA, ylim=NA)
+                         xlim=NA, ylim=NA, yRescale=c(0,1))
                          
                          
 ##########################################################################################
@@ -100,7 +100,7 @@ shinyServer(function(input, output, session) {
         vals$dat  <- read.sqa(file=inFile$datapath)
         vals$nB <- length(vals$dat)
       }
-      else if(ext=="sqb"){
+      else if(ext=="sqb" ||  ext=="sq"){
         vals$dat[[1]] <- read.sqb(file=inFile$datapath)
       }
       else if(ext=="csv" || ext=="txt"){  # another don't ask me why...
@@ -124,6 +124,7 @@ shinyServer(function(input, output, session) {
       }
       vals$xlim <- vals$ylim <- matrix(NA, nrow=vals$nB, ncol=2)
       for(i in 1:vals$nB) vals$XInit[[i]] <- vals$dat[[i]]$x
+      vals$yRescale<- c(0,1)
     })
   })
   
@@ -137,6 +138,7 @@ shinyServer(function(input, output, session) {
 ##  ==  TRUNCATE DATA  ==
   observe({
     input$truncLimits
+    Sys.sleep(1)
     isolate({
       trunc <- input$truncLimits
       if(is.null(trunc))
@@ -156,9 +158,9 @@ shinyServer(function(input, output, session) {
           vals$dat <- list(list())
           vals$nB <- 1
           if(ext=="sqa"){
-            vals$dat <- read.sqa(file=inFile$datapath)
+            vals$dat <- read.sqa(file=inFile$datapath) 
           }
-          else if(ext=="sqb"){
+          else if(ext=="sqb" || ext=="sq"){
             vals$dat[[1]] <- read.sqb(file=inFile$datapath)
           }
           else if(ext=="csv" || ext=="txt"){  # another don't ask me why...
@@ -288,7 +290,7 @@ shinyServer(function(input, output, session) {
         dat <- list(list())
         if(ext=="sqa")
           dat  <- read.sqa(file=inFile$datapath)
-        else if(ext=="sqb")
+        else if(ext=="sqb" || ext=="sq" )
           dat[[1]] <- read.sqb(file=inFile$datapath)
         else{  # another don't ask me why...
           dat.tmp <- read.csv(inFile$datapath, header=input$headerCB, sep=input$separatorRB)  
@@ -319,18 +321,19 @@ shinyServer(function(input, output, session) {
     input$calcSigmaButton
     isolate({
       sigPar <- as.numeric(unlist(strsplit(input$sigma, ",")))
+      k <- as.numeric(unlist(strsplit(input$sigmaTS, ",")))
       progress <- Progress$new(session)
       mess <- "Calculating, please wait..."
       progress$set(message = mess, value = 0.1)
-      if( length(sigPar)==1 && !is.na(sigPar) ){
+      if( length(sigPar)==1 && !is.na(sigPar) && !any(is.na(k)) ){
         for(i in 1:vals$nB){  
-          vals$dat[[i]] <- set.sigma(vals$dat[[i]], n.regions=sigPar)
+          vals$dat[[i]] <- set.sigma(vals$dat[[i]], n.regions=sigPar, thresh.scale=k)
           progress$set(message = mess, value = (i/vals$nB-0.01))
         }
       }
-      if( length(sigPar)==2 && !any(is.na(sigPar)) ){
+      if( length(sigPar)==2 && !any(is.na(sigPar))  && !is.na(k) ){
         for(i in 1:vals$nB){
-          vals$dat[[i]] <- set.sigma(vals$dat[[i]], x.bkg.only=sigPar)
+          vals$dat[[i]] <- set.sigma(vals$dat[[i]], x.bkg.only=sigPar, thresh.scale=k)
           progress$set(message = mess, value = (i/vals$nB-0.01))
         }
       }
@@ -339,6 +342,58 @@ shinyServer(function(input, output, session) {
     })
   })
 
+    
+    
+############################
+##  ==  SET R-SIGMA AND PLOT G(R) ==
+  observe({
+    input$plotPrelimGr
+    isolate({
+      gridparam <- as.numeric(unlist(strsplit(input$rGrid, ",")))
+
+      progress <- Progress$new(session)
+      mess <- "Calculating, please wait... \n\n"
+      wis <- whatIsSpecified(vals$dat)
+      if(!is.null(input$bankNo))
+        bankNo <- as.numeric(input$bankNo)
+      else
+        bankNo <- 1
+      if(wis[[bankNo]]$sigma && (length(gridparam)==3)){
+        progress$set(message = mess, value = 0.1)
+        minR =  gridparam[1]  
+        maxR =  gridparam[2]  
+        dr =  gridparam[3]  
+        r <- seq(minR, maxR, dr)
+        sigma.r <- 0
+        delta <- c(diff(vals$dat[[bankNo]]$x)[1], diff(vals$dat[[bankNo]]$x))
+        cat("Calculating r-space noise... \n\n")
+        progress$set(message = mess, value = 0.25)
+        for(j in 1:length(r)){
+          sigma.r[j] <- sum((2/pi*delta*vals$dat[[bankNo]]$x*sin(vals$dat[[bankNo]]$x*r[j])*vals$dat[[bankNo]]$sigma)^2)
+          sigma.r[j] <- sqrt(sigma.r[j])
+        }
+        # avoid dividing by zero  
+        if(sigma.r[1]==0)
+          sigma.r[1] <- sigma.r[2]
+      
+        progress$set(message = mess, value = 0.75)
+        cat("Calculating FT of the experimental data... \n\n")
+        gr <- sineFT(f.Q=vals$dat[[bankNo]]$y-1, Q=vals$dat[[bankNo]]$x, r=r)
+        vals$estGr <- list(r=r, gr=gr, stdev=sigma.r)
+        progress$set(message = mess, value = 0.999)
+      }
+      else if(!wis[[bankNo]]$sigma && wis[[bankNo]]$x){
+        progress$set(message = "Estimate Q-space noise first!", value = 0.0)
+        Sys.sleep(2)
+      }      
+      else if(length(gridparam)!=3 && wis[[bankNo]]$x){
+        progress$set(message = "Set r-space grid!", value = 0.0)
+        Sys.sleep(2)
+      }         
+      
+      progress$close()
+    })
+  })
 
 ###################################
 ##                               ##
@@ -359,7 +414,45 @@ shinyServer(function(input, output, session) {
     textInput("truncLimits", label = c("Type minimum x, maximum x"), value = truncLim)
   })
   
+####################################
+## OUTPUT SQA SPLIT DATA   
+   output$sqaSplit <- renderUI({
+    if (vals$nB==1)
+      return(NULL)
+    downloadButton('downloadSqaSplit', 'Split by banks and download')  
+  }) 
   
+  output$downloadSqaSplit <- downloadHandler(
+    filename = function() { paste('banks', '.zip', sep='') }, 
+      content = function(file) {
+        inFile <- input$datafile
+        sqa <- scan(file=inFile$datapath, what="list", sep="\n")
+        N <- length(sqa)
+        i.start <- 0
+        nBanks <- 0
+        for(i in 1:N){
+          if(strsplit(sqa[i], split=" ")[[1]][1]=="#L"){
+            i.start[nBanks+1] <- i+1 
+            nBanks <- nBanks + 1 
+          }
+        }
+        i.start[nBanks+1] <- length(sqa)+5
+        
+        name <- 0
+        for(i in 1:nBanks){
+          name[i] <- strsplit(inFile$name, '[.]')[[1]]
+          name[i] <- paste(name[i], "_b", i, ".sqa", sep="") 
+          writeLines(sqa[ (i.start[i]-4):(i.start[i+1]-5)], con = name[i], sep = "\n", useBytes = FALSE)  
+        }
+        zip(zipfile=file, files=name)
+        if(file.exists(paste0(file, ".zip"))) {file.rename(paste0(file, ".zip"), file)}
+  
+      }
+  )
+  
+
+       
+       
 ####################################
 ## OUTPUT BKG BOUNDS 
   output$bkgBoundsR <- renderUI({   
@@ -607,6 +700,7 @@ shinyServer(function(input, output, session) {
     else
       return(NULL)
   }) 
+    
 ####################################
 ## DOWNLOAD TO FIX FILE!
   output$downloadFix <- downloadHandler(filename = function() { paste('corrections', '.fix', sep='') }, content = function(file) {
@@ -623,6 +717,61 @@ shinyServer(function(input, output, session) {
       write.fix(fit.res, file = "fix.tmp")
       writeLines(readLines("fix.tmp"), file)
       file.remove("fix.tmp")
+  })
+
+####################################
+## APPEND FIX BUTTON  
+  output$messageFixR <- renderUI({
+    if( (length(vals$fitRes[[1]]) > 1) && (vals$nB >= 1) )
+      return((h4("Append to existing .fix file")))
+    else
+      return(NULL)
+  }) 
+  output$selectFixR <- renderUI({
+    if( (length(vals$fitRes[[1]]) > 1) && (vals$nB >= 1) )
+      return( fileInput('fixfile', strong('Append to existing .fix file'), accept=c('.fix')) )
+    else
+      return(NULL)
+  })   
+    
+   output$appendFixR <- renderUI({
+    if( (length(vals$fitRes[[1]]) > 1) && (vals$nB >= 1) && !is.null(input$fixfile))
+      return(downloadButton('appendFix', HTML(paste("Download it here"))))
+    else
+      return(NULL)
+  })               
+                
+####################################
+## APPEND TO FIX FILE!
+  output$appendFix <- downloadHandler(filename = function() { paste('corrections', '.fix', sep='') }, content = function(file) {
+      inFile <- input$fixfile   
+      fit.res <- vals$fitRes
+      for(i in 1:vals$nB){
+        N <- length(fit.res[[i]]$x)
+        NInit <- length(vals$XInit[[i]])
+        if(N < NInit){
+           fit.res[[i]]$x <- vals$XInit[[i]]
+           fit.res[[i]]$curves$bkg <- c(fit.res[[i]]$curves$bkg, rep(0, NInit-N))
+        }      
+      }
+  
+      writeLines(readLines(inFile$datapath), "01x001.tmp")
+      N <- length(fit.res)
+      if(!is.null(fit.res$fit.details)){
+        fit.res <- list(fit.res)
+        N <- 1
+      }
+      options(warn=-1)
+      for(i in 1:N){
+        write(c(paste("#S ",i," Correction File for Bank ",fit.res[[i]]$fit.details$id,sep=""), "#L Q MULT ADD"), file="01x001.tmp", append=TRUE)
+        res <- cbind(fit.res[[i]]$x, rep(1,length(fit.res[[i]]$x)), -fit.res[[i]]$curves$bkg)
+        write.table(res, file="01x001.tmp", append=TRUE, col.names=FALSE, row.names=FALSE, quote=FALSE, sep="\t")  
+      }
+      options(warn=0)
+
+      writeLines(readLines("01x001.tmp"), file)
+      file.remove("01x001.tmp")
+     
   })
 ####################################
 ## DOWNLOAD GR AS TEXT!       
@@ -954,7 +1103,7 @@ observe({
     if(toPlot[[bankNo]]$SB)  lines(dat[[bankNo]]$x, dat[[bankNo]]$SB, col=3, lwd=2)
     if(toPlot[[bankNo]]$sigma){
       if(toPlot[[bankNo]]$smoothed){
-        lines(dat[[bankNo]]$x, dat[[bankNo]]$smoothed, col=4)
+        lines(dat[[bankNo]]$x, dat[[bankNo]]$smoothed, col="cyan", lwd=2)
         lines(dat[[bankNo]]$x, dat[[bankNo]]$smoothed+2*dat[[bankNo]]$sigma, col=2)
         lines(dat[[bankNo]]$x, dat[[bankNo]]$smoothed-2*dat[[bankNo]]$sigma, col=2)       
       }
@@ -963,7 +1112,7 @@ observe({
         lines(dat[[bankNo]]$x, dat[[bankNo]]$y-2*dat[[bankNo]]$sigma, col=2)       
       }     
     }
-    if(toPlot[[bankNo]]$lambda)  lines(dat[[bankNo]]$x, dat[[bankNo]]$lambda, col=5, lwd=2)            
+    if(toPlot[[bankNo]]$lambda)  lines(dat[[bankNo]]$x, dat[[bankNo]]$lambda, col=6, lwd=2)            
   }     
 ###############
 # PLOT RENDER
@@ -984,7 +1133,7 @@ observe({
 #    par(fig = c(0, 1, 0, 1), oma = c(3, 3, 3, 3), mar = c(0, 0, 0, 0), new = TRUE)
     plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")    
     legend("bottom", c("data", "baseline", "lambda", "smoothed", "+/-2*stdev"), xpd = TRUE, horiz = TRUE, 
-           inset = c(0,0), bty = "n", lty=1, col = c(1,3,5,4,2), lwd=2, cex = 1)#      par(xpd=FALSE)   
+           inset = c(0,0), bty = "n", lty=1, col = c(1,3,6,"cyan",2), lwd=2, cex = 1)#      par(xpd=FALSE)   
   }  
   output$legendPlot <- renderPlot({
     if (length(vals$dat[[1]])==0)
@@ -1004,7 +1153,7 @@ observe({
     
     return(downloadButton('downloadMainPlot', 'Download plot'))     
    })  
-  
+
 ####################################
 ## DOWNLOAD HADLER
   output$downloadMainPlot <- downloadHandler(
@@ -1020,7 +1169,40 @@ observe({
      }
   )
 
-  
+###############
+# DOWNLOAD BUTTON
+  output$downloadestGrPlotR <- renderUI({
+    dat <- vals$dat
+    if (length(dat[[1]])==0)
+       return(NULL)   
+    if (length(vals$estGr)==0)
+       return(NULL)  
+    toPlot <- whatIsSpecified(dat)
+    if (!toPlot[[1]]$x || !toPlot[[1]]$y)
+      return(NULL)
+    
+    return(downloadButton('downloadestGrPlot', 'Download plot'))     
+   })    
+####################################
+## DOWNLOAD HADLER
+  output$downloadestGrPlot <- downloadHandler(
+      filename = function() { 'estGr.png' }, 
+      content = function(file) {
+        PDF <- vals$estGr
+        stdev <- PDF$stdev*2
+        gr <- PDF$gr
+        r <- PDF$r
+        rho.0 <- 0
+        xlim <- ylim <- NA
+        if(!is.null(input$selectPlot) && input$selectPlot==paste("estgr")){
+          xlim <- input$plotLimX
+          ylim <- input$plotLimY
+        }   
+        png(file, width=12, height=8, units="in", res=600,  pointsize=12)
+        print(fplot.Gr(r=r, gr=gr, stdev=stdev, rho.0=rho.0, xlim=xlim, ylim=ylim, title="Estimated G(r)"))                       
+        dev.off()
+     }
+  )   
  #############################################
 ## SHOWS PROGRESS IN PARAMETER ESTIMATIONS
   output$progress <- renderUI({
@@ -1165,7 +1347,32 @@ observe({
     else
       return(NA) 
   })            
- 
+
+####################################
+##  ==  FIT RESULTS PLOT -- Gr ==
+  output$prelimGrPlot <- renderPlot({      
+    if(length(vals$estGr)!=0){
+      PDF <- vals$estGr
+      stdev <- PDF$stdev*2
+      gr <- PDF$gr
+      r <- PDF$r
+      rho.0 <- 0
+      if(!is.null(input$rhoInclGr) && is.numeric(input$rhoInclGr))
+        rho.0 <- input$rhoInclGr
+      if(!is.null(vals$datGr[[1]]$rho.0))
+        rho.0 <- vals$datGr[[1]]$rho.0
+   
+      xlim <- ylim <- NA
+      if(!is.null(input$selectPlot) && input$selectPlot==paste("estgr")){
+        xlim <- input$plotLimX
+        ylim <- input$plotLimY
+      }   
+      fplot.Gr(r=r, gr=gr, stdev=stdev, rho.0=rho.0, xlim=xlim, ylim=ylim, title="Estimated G(r)")
+    }  
+    else
+      return(NA) 
+  })
+  
 #################
 # DOWNLOAD BUTTON
   output$downloadGrPlotR <- renderUI({
@@ -1265,7 +1472,9 @@ observe({
         choices[["Background estimation"]] <- paste("fit", 1, sep="")
       
       if(length(vals$Gr)!=0)
-        choices[["Corrected G(r)"]] = "gr"     
+        choices[["Corrected G(r)"]] = "gr" 
+      if(length(vals$estGr)!=0)
+        choices[["Estimated G(r)"]] = "estgr"         
     }
  
     return(
@@ -1281,7 +1490,7 @@ observe({
       return(NULL)
     
     selectPlot <- substr(input$selectPlot, 1, 3)
-    if(selectPlot=="ban")
+    if(selectPlot=="ban" || selectPlot=="est")
       s1 <- div(span("(you can find it on the"), span(em("'Data Plot'"), style = "color:#0000FF;"), span("inset)"))
     else    
       s1 <- div(span("(you can find it on the"), span(em("'Fit Results Plot'"), style = "color:#0000FF;"), span("inset)"))
@@ -1317,6 +1526,10 @@ observe({
       if(ps=="gr"){
         minX <- min(vals$Gr$r)
         maxX <- max(vals$Gr$r)        
+      }
+      else if(ps=="estgr"){
+        minX <- min(vals$estGr$r)
+        maxX <- max(vals$estGr$r)        
       }
       else{
         minX <- min(vals$dat[[1]]$x)
@@ -1362,6 +1575,10 @@ observe({
         minY <- min(vals$Gr$gr)
         maxY <- max(vals$Gr$gr)        
       }
+      else if(ps=="estgr"){
+        minY <- min(vals$estGr$gr)
+        maxY <- max(vals$estGr$gr)        
+      }
       else{
         if(wis[[1]]$SB){
           minY <- min(vals$dat[[1]]$y-vals$dat[[1]]$SB)
@@ -1374,7 +1591,11 @@ observe({
       }
     
     }
-    dy=(maxY-minY)/1000
+    maxYnew <- vals$yRescale[2]*(maxY-minY) + minY
+    minYnew <- vals$yRescale[1]*(maxY-minY) + minY
+    maxY <- maxYnew
+    minY <- minYnew
+    dy=(maxY-minY)/2500
     return(sliderInput("plotLimY", strong("y limits"), 
              min = minY-0.4*abs(minY), max = maxY+0.4*abs(maxY), 
              step=dy, value = c(minY, maxY))
@@ -1383,8 +1604,66 @@ observe({
   })   
         
         
+  observe({
+    if(input$rescaleY==0)
+      return(NULL)
+    isolate({    ## react on change
+      if(length(vals$dat[[1]])==0 || is.null(input$selectPlot))
+        return(NULL)  
+      wis <- whatIsSpecified(vals$dat)
+      if (!wis[[1]]$y)
+        return(NULL) 
+
+      ps <- input$selectPlot    
+      if (vals$nB>1){
+        for(i in 1:vals$nB){
+          fitN <- paste("fit", i, sep="")      
+          bankN <- paste("bank", i, sep="")
+          if(ps==fitN || ps==bankN){
+            if(wis[[i]]$SB){
+              minY <- min(vals$dat[[i]]$y-vals$dat[[i]]$SB)
+              maxY <- max(vals$dat[[i]]$y-vals$dat[[i]]$SB)
+            }
+            else{          
+              minY <- min(vals$dat[[i]]$y)
+              maxY <- max(vals$dat[[i]]$y)
+            }
+          }        
+        }
+      }
+      else{
+        if(ps=="gr"){
+          minY <- min(vals$Gr$gr)
+          maxY <- max(vals$Gr$gr)        
+        }
+        else if(ps=="estgr"){
+          minY <- min(vals$estGr$gr)
+          maxY <- max(vals$estGr$gr)        
+        }
+        else{
+          if(wis[[1]]$SB){
+            minY <- min(vals$dat[[1]]$y-vals$dat[[1]]$SB)
+            maxY <- max(vals$dat[[1]]$y-vals$dat[[1]]$SB)
+          }
+          else{          
+            minY <- min(vals$dat[[1]]$y)
+            maxY <- max(vals$dat[[1]]$y)
+          }    
+        }
+      
+      }    
+      ylim <- input$plotLimY
+      vals$yRescale <- (ylim - minY)/(maxY-minY)      
+    }) 
+  })
   
-  
+   observe({
+    if(input$resetY==0)
+      return(NULL)
+    isolate({  
+      vals$yRescale <- c(0,1)     
+    }) 
+  })
   
 })
 

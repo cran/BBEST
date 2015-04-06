@@ -5,10 +5,10 @@
 Set the experimental uncertainty 
 }
 \description{
-This function either sets the pointwise experimental uncertainty or  estimates it using \code{aws} library.
+This function either sets the pointwise experimental uncertainty or estimates it using \code{wmtsa} library.
 }
 \usage{
-set.sigma(data, sigma=NA, x.bkg.only=NA, n.regions=10)
+set.sigma(data, sigma=NA, x.bkg.only=NA, n.regions=10, thresh.scale=1)
 }
 
 \arguments{
@@ -16,6 +16,7 @@ set.sigma(data, sigma=NA, x.bkg.only=NA, n.regions=10)
   \item{sigma}{numeric vector which, if not \code{NA}, determines the pointwise experimental uncertainty.}
   \item{x.bkg.only}{if parameter \code{sigma} is \code{NA}, determines the peak-free region used to estimate the noise.}
   \item{n.regions}{if both parameters \code{sigma} and \code{x.bkg.only} are \code{NA}, the grid is split into \code{n.regions} equal regions. The noise is then estimated for each of these regions. See details}
+  \item{thresh.scale}{numeric vector or scalar which is used to amplify or attenuate the threshold values for a wavelet shrinkage. }
 }
 \value{
 An object of type \code{data}. Elements 
@@ -26,12 +27,12 @@ are replaced with their new values.
 \details{
 We assume the experimental uncertainty to have  a Gaussian distribution with x-dependent amplitude. Splitting the grid into \code{n.regions} segments and estimating Gaussian standard deviations over each of these segments allows us to approximate the true distribution.
 
-The function uses \code{aws} package that implements Propagation-Separation Approach to adaptive smoothing to estimate the noise level.
+The function uses \code{wavShrink} package that performs a decimated discrete wavelet transform for signal smoothing. The use of \code{thresh.scale} argument signifies a departure from a model driven estimate of the thresholds and can be used to tweak the levels to obtain a smoother or rougher result. 
 }
 \references{
-Polzehl, J. and Spokoiny, V. (2006): Propagation-Separation Approach for Local Likelihood Estimation, \emph{Prob. Theory and Rel. Fields} \bold{135}(3), 335-362. 
+Percival, D. B. and Walden, A. T. (2000): Wavelet Methods for Time Series Analysis, \emph{Cambridge University Press}. 
 
-Polzehl, J. (2013): aws: Adaptive Weights Smoothing Version 1.9-3. \url{http://CRAN.R-project.org/package=aws}.
+Percival, D. B. (2013): wmtsa: Wavelet Methods for Time Series Analysis Version 2.0-0. \url{http://CRAN.R-project.org/package=wmtsa}.
 }
 
 \examples{

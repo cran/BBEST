@@ -62,6 +62,9 @@ read.sqa <- function(file = stop("'file' must be specified")){
   res[[bank]]$SB <- rep(0, length(res[[bank]]$x))
   res[[bank]]$id <- ids[bank]
   
+  for(i in 1:bank)
+    res[[bank]]$y[ which( is.na(res[[bank]]$y) ) ] <- 0
+  
   return(res)
 }
 
@@ -124,6 +127,7 @@ read.sqb <- function(file = stop("'file' must be specified")){
     write(sqb[i], file=Tfile, append=TRUE)
   dat <- read.table(Tfile)
   unlink(Tfile)
+  dat[which(is.na(dat[,2])),2] <- 0
   return(list(x=dat[,1], y=dat[,2], sigma=rep(0, length(dat[,1])), lambda=rep(0, length(dat[,1])), SB=rep(0, length(dat[,1])) ))
 }
 ###
@@ -155,6 +159,7 @@ read.data <- function(file = stop("'file' must be specified"), ...){
     colnames(data)[1] <- "x"
   if(is.null(data$y))
     colnames(data)[2] <- "y"
+  data$y[which(is.na(data$y))]   <- 0
   class(data) <- "data"	   
   return(data)  
 }
@@ -180,38 +185,38 @@ trim.data <- function(data, x.min, x.max){
 
 
 ###
-set.sigma <- function(data, sigma=NA, x.bkg.only=NA, n.regions=10){
+set.sigma <- function(data, sigma=NA, x.bkg.only=NA, n.regions=10, thresh.scale=1){
   y.smoothed <- NA 
+  k <- thresh.scale
+
   if(is.na(sigma[1])){
     if(is.na(x.bkg.only[1])){
-	  n <- floor(length(data$x)/n.regions)
-	  x.bkg.i <- 1:n
-	  sigma <- 0
-	  y.smoothed <- 0
-	  for(i in 1:n.regions){
-	    cat("\n step ", i, " of ", n.regions, "\n\n")
-		if(i==n.regions)
-		  x.bkg.i <- x.bkg.i[1]:length(data$x)
-#		y.sm <- aws::lpaws(data$y[x.bkg.i], degree=2, ladjust=2)@theta[,1]
-# while lpwas is not worknig under R 3.1.1
-		y.sm <- aws::aws(data$y[x.bkg.i], ladjust=0.5)@theta[,1]
-		sig <- sqrt(mean((y.sm-data$y[x.bkg.i])^2))
-		sigma <- c(sigma, rep(sig, length(x.bkg.i)))
-		y.smoothed <- c(y.smoothed, y.sm)
-        x.bkg.i <- x.bkg.i + n
-	  }
-	  y.smoothed <- y.smoothed[-1]
-	  sigma <- sigma[-1]	  
+      if(length(k)==1)
+        k <- rep(k, n.regions)
+      n <- floor(length(data$x)/n.regions)
+      x.bkg.i <- 1:n
+      sigma <- 0
+      y.smoothed <- 0
+      for(i in 1:n.regions){
+        cat("\n step ", i, " of ", n.regions, "\n\n")
+        if(i==n.regions)
+          x.bkg.i <- x.bkg.i[1]:length(data$x)
+        y.sm <- wmtsa::wavShrink(data$y[x.bkg.i], wavelet="s8", shrink.fun="hard", thresh.fun="universal",  thresh.scale=k[i], xform="modwt")
+        sig <- sqrt(mean((y.sm-data$y[x.bkg.i])^2))
+        sigma <- c(sigma, rep(sig, length(x.bkg.i)))
+        y.smoothed <- c(y.smoothed, y.sm)
+          x.bkg.i <- x.bkg.i + n
+      }
+      y.smoothed <- y.smoothed[-1]
+      sigma <- sigma[-1]	  
     }
     else{
       x.min.i <- which(abs(data$x-x.bkg.only[1])==min(abs(data$x-x.bkg.only[1])))
       x.max.i <- which(abs(data$x-x.bkg.only[2])==min(abs(data$x-x.bkg.only[2])))
-	  x.bkg.i <- x.min.i:x.max.i
- #     y.smoothed <- aws::lpaws(data$y[x.bkg.i], degree=2, ladjust=10)@theta[,1]
-# while lpwas is not worknig under R 3.1.1
-    y.smoothed <- aws::aws(data$y[x.bkg.i], ladjust=2)@theta[,1]
-	  sigma <- rep(sqrt(mean((y.smoothed-data$y[x.bkg.i])^2)), length(data$x))
-	  y.smoothed <- c(data$y[1:(x.min.i-1)], y.smoothed, data$y[(x.max.i+1):length(data$x)])
+      x.bkg.i <- x.min.i:x.max.i
+      y.smoothed <- wmtsa::wavShrink(data$y[x.bkg.i], wavelet="s8", shrink.fun="hard", thresh.fun="universal",  thresh.scale=k, xform="modwt")
+      sigma <- rep(sqrt(mean((y.smoothed-data$y[x.bkg.i])^2)), length(data$x))
+      y.smoothed <- c(data$y[1:(x.min.i-1)], y.smoothed, data$y[(x.max.i+1):length(data$x)])
     }
   }
   else{
@@ -290,10 +295,7 @@ set.Gr <- function(data, r1=seq(0, 1, 0.005), r2=NA, rho.0,
     sigma.r <- 0
     cat("Calculating r-space noise... \n")
     for(j in 1:length(r1)){
-      sigma.r[j]<-0
-      for(i in 1:length(data$x)){
-        sigma.r[j] <- sigma.r[j] + (2/pi*delta[i]*data$x[i]*sin(data$x[i]*r1[j])*data$sigma[i])^2
-      }
+      sigma.r[j] <- sum((2/pi*delta*data$x*sin(data$x*r1[j])*data$sigma)^2)
       sigma.r[j] <- sqrt(sigma.r[j])
     }
     # avoid dividing by zero  

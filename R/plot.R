@@ -246,7 +246,7 @@ calc.Gr <- function(fit.results, rho.0, plot=TRUE, r.min=0, r.max=5, dr=0.01, Q.
   return(list(r=r, gr=gr, stdev=stdev/nsd))
 }
 
-fplot.Gr <- function(r, gr, stdev, rho.0, nsd=2, gr.compare=NA, xlim=NA, ylim=NA){
+fplot.Gr <- function(r, gr, stdev, rho.0, nsd=2, gr.compare=NA, xlim=NA, ylim=NA, title="corrected G(r)"){
  # require(ggplot2)
   cat("Plotting... \n")
   if(any(is.na(ylim)))
@@ -262,12 +262,12 @@ fplot.Gr <- function(r, gr, stdev, rho.0, nsd=2, gr.compare=NA, xlim=NA, ylim=NA
   if(!is.na(gr.compare[1])){
     curves <- data.frame(x = r, y = gr, gr.compare=gr.compare, l = -4*pi*rho.0*r)	 
     vals = c("black", "red", "darkblue", "blue")
-    labs = c("corrected G(r)", "G(r) to compare", paste("uncertainty interval (+/-",nsd,"sd)", sep=""))
+    labs = c(title, "G(r) to compare", paste("uncertainty interval (+/-",nsd,"sd)", sep=""))
   }
   else{  
     curves <- data.frame(x = r, y = gr, l = -4*pi*rho.0*r)	 
     vals = c("black", "darkblue", "blue")
-    labs = c("corrected G(r)", paste("uncertainty interval (+/-",nsd,"sd)", sep=""))
+    labs = c(title, paste("uncertainty interval (+/-",nsd,"sd)", sep=""))
   }
   melted.curves <- reshape2::melt(curves, id.vars="x")
   ribbon <- data.frame(x = r, y = gr, stdev = stdev)
@@ -280,7 +280,7 @@ fplot.Gr <- function(r, gr, stdev, rho.0, nsd=2, gr.compare=NA, xlim=NA, ylim=NA
     + ylab("G(r)") 
     + xlim(xlim)
     + ylim(ylim)
-    + ggtitle("corrected G(r)")
+    + ggtitle(title)
   )
   print(p1)
   options(warn=0)

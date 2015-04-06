@@ -20,7 +20,7 @@ To install a stable version of 'BBEST' from [CRAN](http://cran.r-project.org/pac
 install.packages('BBEST', dependencies = TRUE)
 ```
 
-Or download [tar ball](http://cran.r-project.org/web/packages/BBEST/index.html), decompress the file, and run `R CMD INSTALL`. You will have to install packages: 'DEoptim', 'aws', 'grid', 'ggplot2', 'reshape2', and 'shiny'.
+Or download [tar ball](http://cran.r-project.org/web/packages/BBEST/index.html), decompress the file, and run `R CMD INSTALL`. You will have to install packages: 'DEoptim', 'wmtsa', 'grid', 'ggplot2', 'reshape2', and 'shiny'.
 
 ## Usage
 
@@ -145,17 +145,21 @@ Therefore, the parameters for calculating the coherent-scattering baseline are s
 
 10. Estimate the noise level
 
-These data feature a large number of intense Bragg peaks below Q=10 Å^-1^. Therefore, it's best to estimate the noise level using the range with Q>10 Å^-1^. Currently, a single range is assigned for all the banks.  Since Bank 1 covers Q only up to Q=20 Å^-1^, it's advised to set this range from 10 Å^-1^ to 20 Å^-1^.  
-  
+These data feature a large number of intense Bragg peaks below Q=10 Å^-1^ and smooth behaviour for larger Q-values. Therefore, it's best to estimate the noise level by dividing the entire Q-range into a certain number of regions (i.e., 4)  
 Therefore, in the field "*Type number of regions or bounds for a signal-free region*", type
 
 ```r
-10, 20
+4
 ```
 
-Alternatively, one can estimate the noise by dividing the entire Q-range into a certain number of regions (i.e., 10).  However, this approach works well only for patterns that have fewer Bragg peaks (i.e., smaller unit cells). 
+and in the field "*Type threshold scale (degree of smoothing)*"
+```r
+1,1,2,5
+```
 
-Estimation of noise level can take some time; be patient and monitor the progress bar above the plot window.  Once the calculation is finished, 'BBEST' will display the estimated noise level (+/- 2 std) using red lines. To check the quality of this estimate, select "*Plot Options*" and adjust the plot limits as necessary to obtain a magnified view of the noise levels.
+for  smoother estimate at high Q-value.
+
+Once the calculation is finished, 'BBEST' will display the estimated noise level (+/- 2 std) using red lines. To check the quality of this estimate, select "*Plot Options*" and adjust the plot limits as necessary to obtain a magnified view of the noise levels.
 
 11. Fit the background for all the banks.  
 
@@ -178,6 +182,21 @@ After the fit is complete, you can view the results by selecting the "*Fit Resul
 For downloading the results, select "*Fit results*" in the Main Menu. Download the *.fix* file for using it in *PDFgetN*.
 
 For saving the fit itself, download the results as the .RData file.
+
+12. To perform steps 5-11 for each bank individually, use command-line functions 
+
+```r
+sqa.split()
+```
+
+and
+
+```r
+fix.merge()
+```
+
+(see [reference manual](http://cran.r-project.org/web/packages/BBEST/BBEST.pdf).)
+
 
 ### II. FITTING the BACKGROUND FOR A BLENDED S(Q)
 
@@ -226,7 +245,13 @@ Select "*Baseline*"
 * In the "*Type number of regions or bounds for a signal-free region*" field, type 
 
 ```r
-15, 20
+4
+```
+
+* In the "*Type threshold scale (degree of smoothing)*" field, type 
+
+```r
+1, 1, 2, 5
 ```
 
 6. Select the "*Set real-space condition*" option from the main menu and check "*Use low-r conditions*". 
