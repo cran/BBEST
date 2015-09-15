@@ -2,7 +2,9 @@
 
 This is the R package 'BBEST' (**B**ayesian **B**ackground **EST**imation) written and maintained by Anton Gagin (anton.gagin@nist.gov).
 
-To cite the 'BBEST' package type 
+Please cite Gagin A. & Levin I. (2014). *A Bayesian approach to removal of incoherent scattering from neutron total-scattering data*. *J. Appl. Cryst.* **47**, 2060-2068 in publications that use this method.
+
+To see the package citation information, type 
 
 ```r
 citation("BBEST")
