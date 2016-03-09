@@ -71,7 +71,7 @@ Element \code{fit.details} is a list with sub-elements:
 \references{
 Ardia, D., Mullen, K., Peterson, B. & Ulrich, J. (2011): DEoptim. R Package Version 2.2-2. \url{http://CRAN.R-project.org/package=DEoptim}.
 
-Mullen, K.M., Ardia, D., Gil, D., Windover, D., Cline, J. (2011): DEoptim: An R Package for Global Optimization by Differential Evolution. \emph{J. Stat. Softw.}, \bold{40}(6), 1-26. \url{http://www.jstatsoft.org/v40/i06/}.
+Mullen, K.M., Ardia, D., Gil, D., Windover, D., Cline, J. (2011): DEoptim: An R Package for Global Optimization by Differential Evolution. \emph{J. Stat. Softw.}, \bold{40}(6), 1-26. \url{https://www.jstatsoft.org/article/view/v040i06}.
 }
 
 \keyword{fit}

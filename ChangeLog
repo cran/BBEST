@@ -1,4 +1,9 @@
-2015-03-09  Anton Gagin <anton.gagin@nist.gov>
+2016-03-09  Anton Gagin <av.gagin@gmail.com>
+        * Version 0.1-6
+        * inst/gui/server.R: added possibility to download PDF with corresponding uncertainty intervals prior to background estimation 
+        * revised help file
+
+2015-09-03  Anton Gagin <anton.gagin@nist.gov>
         * Version 0.1-4
         * R/interface.R: function set.sigma() now uses `wmtsa` package for signal denoising
                          functions read.sqa(), read.sqb(), and read.data() now deal with NaN data
@@ -7,7 +12,7 @@
                              solved truncate-input  problem
                              added possibility to download split PDFGetN .sqa-files
                              
-2015-03-09  Anton Gagin <anton.gagin@nist.gov>
+2015-09-03  Anton Gagin <anton.gagin@nist.gov>
         * Version 0.1-3
         * R/interface.R: added function fix.merge() to merge PDFGetN .fix-files
         * R/interface.R: added function sqa.split() to split PDFGetN .sqa-file into individual files for each databank 

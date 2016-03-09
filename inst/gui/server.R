@@ -1182,7 +1182,7 @@ observe({
       return(NULL)
     
     return(downloadButton('downloadestGrPlot', 'Download plot'))     
-   })    
+   })      
 ####################################
 ## DOWNLOAD HADLER
   output$downloadestGrPlot <- downloadHandler(
@@ -1203,6 +1203,35 @@ observe({
         dev.off()
      }
   )   
+  
+  
+###############
+# DOWNLOAD BUTTON
+  output$downloadestGrDataR <- renderUI({
+    dat <- vals$dat
+    if (length(dat[[1]])==0)
+       return(NULL)   
+    if (length(vals$estGr)==0)
+       return(NULL)  
+    toPlot <- whatIsSpecified(dat)
+    if (!toPlot[[1]]$x || !toPlot[[1]]$y)
+      return(NULL)
+    
+    return(downloadButton('downloadestGrData', 'Download G(r) as text file'))     
+   })      
+####################################
+## DOWNLOAD HADLER
+  output$downloadestGrData <- downloadHandler(
+      filename = function() { 'estGr.txt' }, 
+      content = function(file) {
+        PDF <- vals$estGr
+        stdev <- PDF$stdev
+        gr <- PDF$gr
+        r <- PDF$r
+        write.table(data.frame(r, gr, stdev, gr-2*stdev, gr+2*stdev), file, row.names=FALSE, quote=FALSE, sep="\t") 
+     }
+  )    
+  
  #############################################
 ## SHOWS PROGRESS IN PARAMETER ESTIMATIONS
   output$progress <- renderUI({

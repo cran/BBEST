@@ -21,7 +21,7 @@ set.control(CR=.85, F=.7, NP=300, itermax=2000, parallelType=1)
 \value{a list of elements suitable for \code{\link{do.fit}} and \code{\link{do.fit.banks}}.}
 
 \references{
-Mullen, K.M., Ardia, D., Gil, D., Windover, D., Cline, J. (2011): DEoptim: An R Package for Global Optimization by Differential Evolution. \emph{J. Stat. Softw.}, \bold{40}(6), 1-26. \url{http://www.jstatsoft.org/v40/i06/}.
+Mullen, K.M., Ardia, D., Gil, D., Windover, D., Cline, J. (2011): DEoptim: An R Package for Global Optimization by Differential Evolution. \emph{J. Stat. Softw.}, \bold{40}(6), 1-26. \url{https://www.jstatsoft.org/article/view/v040i06}.
 }
 
 \keyword{fit}

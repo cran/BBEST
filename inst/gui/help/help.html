@@ -37,13 +37,13 @@
   <p></p>
   </br>
   
-  On the top of <i>Data Plot</i> inset you can see the "progress bar". Parameters, that are necessary to specify, are marked with red. Once indicated, they turn green. Optional parameters are marked with grey.  
+ At the top of the <i>Data Plot</i> inset the "progress bar" is diplayed. Those parameters that have to be specified are shown in red. Once provided, they corresponding parameter labels turn green. Optional parameters are marked with grey.  
 <p></p>
-  Hover mouse cursor over a plot to display coordinates of a corresponding point. Mouse click fixes this legend until the next click in a new place.
+  Hover a mouse cursor over a plot to display coordinates of a point. 
 <p></p>  
   
   <h4><a id="load"></a>1. Load data</h4>
-  <b>BBEST</b> supports <i>text</i> files, <i>.csv</i>-files, <i>.sqa</i>  and <i>.sqb</i>-files, returned by  <a href="http://pdfgetn.sourceforge.net/"><b>PDFgetN</b></a>, and <i>.RData</i> files that contain results of the previously made fits (as returned by <i>'Download fit results as .RData file'</i>). For text files data should be given in the following format <p></p>
+  <b>BBEST</b> supports <i>text</i> files, <i>.csv</i>-files, <i>.sqa</i>  and <i>.sqb</i>-files, returned by  <a href="http://pdfgetn.sourceforge.net/"><b>PDFgetN</b></a>, and <i>.RData</i> files that contain results of previous fits (as returned by <i>'Download fit results as .RData file'</i>). For the text files, the data should be given in the following format <p></p>
  
 <div style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><table width="30%" border="0" cellpadding="1" cellspacing="1" style="background-color: #ffffff;">
 <tr valign="top">
@@ -97,7 +97,7 @@
 </table>
 </div>
 <p></p>
-Here SB (coherent baseline S<sub>B</sub>(Q)), sigma (noise level &epsilon;(Q)) and lambda (useful signal level) are the optional columns.
+Here SB (a coherent-scattering baseline S<sub>B</sub>(Q)), sigma (a noise level &epsilon;(Q)) and lambda (a useful signal level) columns are optional.
 <p></p>
 
 <p></p>
@@ -110,40 +110,40 @@ Here SB (coherent baseline S<sub>B</sub>(Q)), sigma (noise level &epsilon;(Q)) a
     <tr valign="top">
     <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Truncate data</span></p>
     </td>
-    <td style="border-width : 0px;">in some situations there is a necessity in removing the unwanted data. For example, low-x regions may contain incorrect estimations, and high-x regions may contain nothing but noise. In the case of neutron scattering experiments this may lead to the inaccuracy in Pair Distribution Function estimation. We recommend to narrow x-region to a reasonable boundaries.
+    <td style="border-width : 0px;">in some cases it is necessary to remove unwanted data. For example, low-x regions can contain artifacts while high-x regions can be dominated by noise. 
     </td>
     </tr>
     <tr valign="top">
     <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Useful signal level</span></p>
     </td>
-    <td style="border-width : 0px;">the mean signal magnitude, lambda, is calculated as a linear piecewise function which is equal to lambda_0 outside the [x.min,x.max] region. Inside this region lambda is approximated by a line connecting points (x_1;lambda_1) and (x_2;lambda_2). This parameter does not require high accuracy. lambda can be thought as a function that will cross centres of the signal peaks after background subtraction. 
+    <td style="border-width : 0px;">the mean signal magnitude, lambda, is calculated as a linear piecewise function, which is equal to lambda_0 outside the [x.min,x.max] region. Inside this region, lambda is approximated by a line that connects points (x_1;lambda_1) and (x_2;lambda_2). An estimate of this parameter does not have to be accurate. lambda can be thought of as a function that crosses the  midpoints of the signal peaks after background subtraction. 
     </td>
     </tr>
     <tr valign="top">
     <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Baseline</span></p>
     </td>
-    <td style="border-width : 0px;">neutron scattering coherent baseline (SB) or any other baseline that shouldn't be subtracted from the experimental signal. For neutron total scattering experiments, SB can be calculated via <p></p>    
+    <td style="border-width : 0px;">neutron coherent-scattering baseline (SB) or any other baseline that has to be preserved in the experimental signal. For neutron total-scattering experiments, SB can be calculated as <p></p>    
     SB(Q)=1-(1-L)&Sigma;<sub>k</sub>N<sub>k</sub>f<sub>k</sub>exp(-1/2&sigma;<sub>kk</sub><sup>2</sup>Q<sup>2</sup>)/N&lt;f<sup>2</sup>&gt;,
     <p></p>
-    where where N<sub>k</sub> is the number of atoms of type k per unit cell, f<sub>k</sub> is the scattering factor for the atom k, &lt;f<sup>2</sup>&gt; is the average of the scattering factor squared, &sigma;<sub>kk</sub><sup>2</sup> is the atomic displacement parameter (ADP), and L is the Laue term. If unknown, the APD(s) could be refined (to do this, real-space condition should be specified).
+    where N<sub>k</sub> is the number of atoms of type k per unit cell, f<sub>k</sub> is the scattering factor for the atom k, &lt;f<sup>2</sup>&gt; is the average of the scattering length squared, &sigma;<sub>kk</sub><sup>2</sup> is the atomic displacement parameter (ADP), and L is the Laue term. If unknown, the APD(s) can be refined (to do this, a real-space condition should be specified).
     </td>
     </tr>
     <tr valign="top">
     <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Noise level</span></p>
     </td>
-    <td style="border-width : 0px;">Although noise in diffraction experiments is per se Poisson, various corrections for background, absorption, multiple scattering, Plazcek and other effects can destroy its structure. We suggest considering the experimental uncertainty as having  Gaussian distribution with x-dependent amplitude. Splitting grid into n.regions segments and estimating Gaussian standard deviation over these segments allows us to approximate the true noise-distribution. Your can indicate number of regions to be used (x-range is then split into n.regions equal regions), or, if noise can be considered as uniform, provide bounds for the peak-free region. <b>BBEST</b> uses <b>wmtsa</b> package that implements decimated discrete wavelet transform for signal smoothing to estimate the noise level. "thresh.scale" argument can be used to tweak the threshold levels to obtain a smoother or rougher result. Indicate a single value or <number of regions> values, divided by commas.
+    <td style="border-width : 0px;">Although noise in diffraction experiments frequently obeys Poisson statistics, various corrections for background, absorption, multiple scattering, etc. can affect its behavior. We suggest considering the experimental uncertainty as having  a Gaussian distribution with an x-dependent amplitude. Splitting the grid into n.regions segments and estimating the Gaussian standard deviation over these segments allows us to approximate the true noise distribution. You can specify the number of regions to be used (x-range is then split into n.regions equal regions), or, if noise can be considered as uniform, provide bounds for the peak-free region. <b>BBEST</b> estimates the noise level using <b>wmtsa</b> package that implements the decimated discrete wavelet transform for signal smoothing. "thresh.scale" argument can be used to tweak the threshold levels to vary the degree of smoothing. Indicate a single value or <number of regions> values, separated by commas.
     </td>
     </tr>
     <tr valign="top">
     <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">P(bkg)</span></p>
     </td>
-    <td style="border-width : 0px;">A probability that a single datapoint contains contributions from background and noise only. Correspondingly, <b>(1-P(bkg))</b> is a probability that a datapoint contains also signal contribution. <b>P(bkg)</b> can be thought as a <i>(total length of areas that contain only background)/(total x-scale area)</i>. If overestimated or underestimated, the background may be overestimated or underestimated, respectively. If you see that the estimated backround possesses both unwanted properties (overestimated in one region and underestimated in the other), try using the iterative procedure. It will estimate <b>P(bkg)</b> at each point separetly (taking twice time for the fit).
+    <td style="border-width : 0px;">A probability for a single datapoint to contain contributions from the background and noise only. <b>(1-P(bkg))</b> is the probability for a datapoint to contain also a signal contribution. <b>P(bkg)</b> can be thought of as a <i>(total length of areas that contain only the background)/(total x-scale area)</i>. If this probability is over- or under-estimated, the background can also be over- or under-estimated, respectively. If you see that the estimated backround exhibits both types of such unwanted behavior (e.g., overestimated in one region and underestimated in another), try using the iterative procedure. It will estimate <b>P(bkg)</b> at each point separately (the fitting time will double).
     </td>
     </tr>    
     <tr valign="top">
     <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">G(r)</span></p>
     </td>
-    <td style="border-width : 0px;"> To calculate and plot G(r) prior to background estimation, indicate bounds and spacing for the r-grid and press "Plot G(r)".
+    <td style="border-width : 0px;"> To calculate and plot G(r) prior to background fitting, indicate the bounds and spacing for the r-grid and press "Plot G(r)".
     </td>
     </tr>      
     </table>
@@ -159,7 +159,7 @@ Here SB (coherent baseline S<sub>B</sub>(Q)), sigma (noise level &epsilon;(Q)) a
   
   
   <h4><a id="gr"></a>3. Set real-space condition</h4>
-  For total scattering experiments a real-space pair distribution function (PDF or G(r)), obtained as the Fourier transform of the total scattering function S(Q), performs a linear (or quasi-linear) behaviour at distances smaller than the shortest interatomic distance in the material. Knowledge of the correct behavior of a PDF at low r can be used to constrain the optimization procedure.   
+  For total scattering experiments, a real-space pair distribution function (PDF or G(r)), obtained as the Fourier transform of the total scattering function S(Q), exhibits a linear (or quasi-linear) dependence on r at distances smaller than the shortest interatomic distance in the material. Knowledge of the correct behavior of a PDF at low r can be used to constrain the optimization procedure.   
   
   <p></p>
   
@@ -169,30 +169,30 @@ Here SB (coherent baseline S<sub>B</sub>(Q)), sigma (noise level &epsilon;(Q)) a
     <tr valign="top">
     <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Condition type</span></p>
     </td>
-    <td style="border-width : 0px;">either 'Gaussian noise' or 'Correlated noise'. The r-space noise can be considered as independent or correlated Gaussian. For better computational stability we recommend to use 'Gaussian noise' option.</td>
+    <td style="border-width : 0px;">either a 'Gaussian noise' or a 'Correlated noise'. The r-space noise can be considered as independent or correlated Gaussian. For better computational stability we recommend using the 'Gaussian noise' option.</td>
     </tr>
     <tr valign="top">
     <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Number density of the material &rho;<sub>0</sub> </span></p>
     </td>
-    <td style="border-width : 0px;">atomic number density of the material. By definition is a number of atoms per unit cell divided by a volume of a unit cell.</td>
+    <td style="border-width : 0px;">atomic number density of the material, which is the number of atoms in the unit cell divided by the unit-cell volume.</td>
     </tr>
     <tr valign="top">
     <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">min(r), max(r), dr</span></p>
     </td>
-    <td style="border-width : 0px;">bounds and spacing for the grid on which the PDF behaviour is controlled.</td>
+    <td style="border-width : 0px;">bounds and spacing for a grid on which the PDF behaviour is constrained.</td>
     </tr>
     </table>
     </div>
  <p></p>
-Use this function only after noise level <b>&epsilon;</b> is estimated.
+Use this function only after the noise level <b>&epsilon;</b> has been estimated.
 <p></p>
 <p></p>
 <br/>
   
- <h4><a id="difev"></a>4. Optimize background with DifEv</h4>
+ <h4><a id="difev"></a>4. Optimize the background with DifEv</h4>
   The posterior maximization is performed using the Differential Evolution Algorithm (DEA; <a href="http://www.springer.com/mathematics/book/978-3-540-20950-8">Price et al., 2005</a>)  implemented in the <b>DEoptim</b> package.
   <p></p>
-  Before starting fit, indicate the following parameters:  
+  Before starting the fit, indicate the following parameters:  
   <p></p>
     <div style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><table width="100%" border="0" cellpadding="2" cellspacing="2" style="background-color: #ffffff;">
     <col width="30%">
@@ -200,7 +200,7 @@ Use this function only after noise level <b>&epsilon;</b> is estimated.
     <tr valign="top">
     <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Number of population members</span></p>
     </td>
-    <td style="border-width : 0px;">NP, number of population members. For many problems it is best to set NP to be at least 10 times the length of the parameter vector (which includes spline knot positions, and, optionally, normalization and ADP parameters). 
+    <td style="border-width : 0px;">NP, number of population members. For many problems, it is best to set NP to be at least 10 times the length of the parameter vector (which includes spline knot positions, and, optionally, the normalization and ADP parameters). 
     </td>
     </tr>
     <tr valign="top">
@@ -212,7 +212,7 @@ Use this function only after noise level <b>&epsilon;</b> is estimated.
     <tr valign="top">
     <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Crossover probability (CR)</span></p>
     </td>
-    <td style="border-width : 0px;">crossover probability from interval [0,1]. The crossover probability CR controls the fraction of the parameter values that are copied from the mutant.
+    <td style="border-width : 0px;">a crossover probability from the interval [0,1]. The crossover probability CR controls the fraction of parameter values that are copied from the mutant.
     </td>
     </tr>
     <tr valign="top">
@@ -222,25 +222,25 @@ Use this function only after noise level <b>&epsilon;</b> is estimated.
     </td>
     </tr>
     <tr valign="top">
-    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Lower and upper bounds for scale factor fit</span></p>
+    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Lower and upper bounds for the scale factor fit</span></p>
     </td>
-    <td style="border-width : 0px;"> bounds for normalization parameter. If no normalization is needed, use the default value '1, 1'</td>
+    <td style="border-width : 0px;"> bounds for the normalization parameter. If no normalization is needed, use the default value '1, 1'</td>
     </tr>
     <tr valign="top">
     <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Lower and upper bounds for background</span></p>
     </td>
-    <td style="border-width : 0px;">estimation for the background minimum and maximum values. For faster convergence it is better to estimate minimum lower and maximum higher than real minimum and maximum values, respectively.
+    <td style="border-width : 0px;">estimates for the background minimum and maximum values. For faster convergence it is better to estimate the minimum lower and the maximum higher than their actual respective values.
     </td>
     </tr>
     <tr valign="top">
-    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Fit background with</span></p>
+    <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Fit the background with</span></p>
     </td>
-    <td style="border-width : 0px;">for the case of fitting of individual-bank data we recommend using an analytical function. For a (blended) total scattering function we recommend using splines. Uncertainty interval estimation in unavailable for the analytical backgrounds.</td>
+    <td style="border-width : 0px;">for fitting of individual-bank data we recommend using the six-parameter analytical function. For a (blended) total scattering function we recommend using splines. Estimation of the Uncertainty interval is unavailable for analytical backgrounds.</td>
     </tr>
     <tr valign="top">
     <td style="border-width : 0px;"><p style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><span style=" font-size: 10pt; font-family: 'Arial', 'Helvetica', sans-serif; font-style: italic; font-weight: bold; color: #000000; background-color: transparent; text-decoration: none;">Number of splines or spline knot positions</span></p>
     </td>
-    <td style="border-width : 0px;">a single integer number (N) will specify number of spline functions to be used (N equidistant knots will be generated). To set specific knot positions, enter numbers divided by commas. Put more knots in the region where background demonstrates oscillative behaviour. </td>
+    <td style="border-width : 0px;">a single integer number (N) will specify the number of spline functions to be used (N equidistant knots will be generated). To set specific knot positions, enter the corresponding numbers separated by commas. Select more knots for those regions that feature an oscillating background. </td>
     </tr>
 
     </table>
@@ -251,21 +251,21 @@ Use this function only after noise level <b>&epsilon;</b> is estimated.
 <br/>
 
  <h4> <a id="fit"></a>5. Fit results</h4>
-  This inset allows to download fit results in a text format, as a correction .fix file for <b>PDFgetN</b>, or as a binary file that contains <b>R</b>-objects. The PDF could be calculated on a specified grid and downloaded as well. To see corresponding plots select <i>'Fit Results Plot'</i> tab on the top tab panel.
+  This inset enables download of the fitting results in a text format, as a correction .fix file for <b>PDFgetN</b>, or as a binary file that contains <b>R</b>-objects. The PDF can be calculated on a specified grid and downloaded as well. To view the corresponding plots, select <i>'Fit Results Plot'</i> tab in the top tab panel.
   <p></p>
-  The iterative algorithm is available if fit was performed using G(r)-corrected Bayesian model and background function was expanded in terms of splines. It includes the following steps: 
+  The iterative algorithm is available if the fit has been performed using the G(r)-corrected Bayesian model and the background function was expanded in terms of splines. It includes the following steps: 
   <p></p>
   <ol type="1">
     <li>Estimation of the background using Q-space Bayesian models</li>
     <li>Calculation of the difference between the G(r) obtained using the two models for r&lt;1&#8491;</li>
-    <li>Conversion of this difference to Q-space and adding it to the estimate of baseline SB</li>    
+    <li>Conversion of this difference to Q-space and adding it to an estimate of the baseline SB</li>    
     <li>Minimization of the target function for the new G(r)-corrected model</li>    
   </ol> 
-  The first and fourth steps can be performed using either Gradient Descent Algorithm (GDA) or DEA. GDA could be faster but tends to converge to a local minimum. DEA, while a slow procedure, solves the global optimization task. The control parameters for DEA will be used same as for the initial fit. 
+  The first and fourth steps can be performed using either the Gradient Descent Algorithm (GDA) or DEA. GDA could be faster but tends to converge to a local minimum. DEA, while slower, is much more robust. The control parameters used for DEA will be the same as used for the initial fit. 
 <br/>
 
  <h4> <a id="plot"></a>6. Plot options</h4>
-    You can set here x- and y-axis limits of a graph. If this option was used, the truncation procedure will not further automatically rescale data plot. Note, that choosing plot name from the select list does not render plot on the right panel. To do that, select the corresponding inset on the top. 
+    You can set x- and y-axis limits for a graph. If this option is used, the truncation procedure won't rescale the data plot automatically. Note, that choosing the plot name from the pulldown select list does not render the plot on the right panel. To do that, select the corresponding inset at the top. 
 
   </body>
 </html>

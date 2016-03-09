@@ -1,6 +1,6 @@
 # BBEST
 
-This is the R package 'BBEST' (**B**ayesian **B**ackground **EST**imation) written and maintained by Anton Gagin (anton.gagin@nist.gov).
+This is the R package 'BBEST' (**B**ayesian **B**ackground **EST**imation) written and maintained by Anton Gagin (av.gagin@gmail.com).
 
 Please cite Gagin A. & Levin I. (2014). *A Bayesian approach to removal of incoherent scattering from neutron total-scattering data*. *J. Appl. Cryst.* **47**, 2060-2068 in publications that use this method.
 
@@ -22,7 +22,7 @@ To install a stable version of 'BBEST' from [CRAN](http://cran.r-project.org/pac
 install.packages('BBEST', dependencies = TRUE)
 ```
 
-Or download [tar ball](http://cran.r-project.org/web/packages/BBEST/index.html), decompress the file, and run `R CMD INSTALL`. You will have to install packages: 'DEoptim', 'wmtsa', 'grid', 'ggplot2', 'reshape2', and 'shiny'.
+Or download [tar ball](http://cran.r-project.org/package=BBEST/index.html), decompress the file, and run `R CMD INSTALL`. You will have to install packages: 'DEoptim', 'wmtsa', 'grid', 'ggplot2', 'reshape2', and 'shiny'.
 
 ## Usage
 
@@ -197,7 +197,7 @@ and
 fix.merge()
 ```
 
-(see [reference manual](http://cran.r-project.org/web/packages/BBEST/BBEST.pdf).)
+(see [reference manual](http://cran.r-project.org/package=BBEST/index.html/BBEST.pdf).)
 
 
 ### II. FITTING the BACKGROUND FOR A BLENDED S(Q)
