@@ -5,8 +5,8 @@
 ##  SIDEBAR PANEL
 ##    MAIN MENU
 ##    LOCAL MENU
-##      LOAD DATA 
-##      PREPARE DATA 
+##      LOAD DATA
+##      PREPARE DATA
 ##        TRUNCATE DATA
 ##        LAMBDA
 ##        BASELINE
@@ -124,27 +124,27 @@ shinyUI(fluidPage(
 ##     NOISE
               strong("Noise level"),
               textInput("sigma", label = c("Type number of regions or bounds for a signal-free region"),  value = ""),
-              textInput("sigmaTS", label = c("Type threshold scale (degree of smoothing)"),  value = "1"),
+              textInput("sigmaTS", label = c("Type estimated noise variance"),  value = "0.1"),
               p(style="margin:0; padding:0;"),
               actionButton("calcSigmaButton", label = "Estimate noise"),
-              p(),              
-##     P.BKG    
+              p(),
+##     P.BKG
               strong("P(bkg)"),
               numericInput("pbkg", min=-1, max=1, step=0.01,
                 label = "Type probability that data points contain no signal contribution (only background). Type '-1' to estimate P(bkg) iteratively",
                 value = 0.5),
               p(),
-##     G(R) PLOT    
+##     G(R) PLOT
               strong("G(r)"),
               checkboxInput("estGr", "Estimate PDF"),
               conditionalPanel(
                 condition = "input.estGr == true",
                 textInput("rGrid", label = c("Type minimum r, maximum r, grid spacing dr"), value = ""),
                 p(style="margin:0; padding:0;"),
-                actionButton("plotPrelimGr", label = "Plot G(r)")                
-              )              
-              
-              
+                actionButton("plotPrelimGr", label = "Plot G(r)")
+              )
+
+
             ),
 
 
@@ -164,7 +164,7 @@ shinyUI(fluidPage(
                 selectInput("GrNoiseType", label = strong("Condition type"),
                   choices = list("Gaussian noise" = "gauss",
                       "Correlated noise" = "correlated"),
-                  selected = "gauss"),                          
+                  selected = "gauss"),
                 numericInput("rhoInclGr", value=NA, min=0, max=1,  step=0.0000001,
                   label = strong(HTML(paste("Number density of the material &rho;", tags$sub(0), sep = "")))),
                 numericInput("rminInclGr", min=0, max=2.5, step=0.001,
@@ -176,7 +176,7 @@ shinyUI(fluidPage(
                 numericInput("drInclGr", min=0.001, max=0.05, step=0.001,
                   label = div( span(strong("grid spacing")), span(strong(em("dr"))) ),
                   value = 0.005),
-                p(),  
+                p(),
                 actionButton("setGrButton", label = strong("Submit")),
                 p(),
                 HTML(paste("(make sure", strong(HTML("&epsilon;")), "(noise level) has been estimated)"))
@@ -211,15 +211,15 @@ shinyUI(fluidPage(
                 value = "1, 1"),
               p(),
               uiOutput("bkgBoundsR"),
-              p(),  
-              uiOutput("fitWithR"),              
+              p(),
+              uiOutput("fitWithR"),
               p(),
               conditionalPanel(
                 condition = "input.fitWith == 'fitWith.splines'",
                 textInput("fitKnots",
                   label = strong("Number of splines or spline knot positions"),
                   value = 20
-                )            
+                )
               ),
               p(),
               actionButton("doFit", label = strong("Start fit"))
@@ -241,7 +241,7 @@ shinyUI(fluidPage(
 #              p(),
               uiOutput("selectFixR"),
               uiOutput("appendFixR"),
-              p(),              
+              p(),
               br(),
               uiOutput("outHeaderGr"),
               p(),
@@ -259,15 +259,15 @@ shinyUI(fluidPage(
               uiOutput("iterEpsR"),
               uiOutput("iterNIterR"),
               uiOutput("doIterationR")
-            )         
+            )
           )
         )
 	    ),
       ##   = Plot Options =
       conditionalPanel(
-        condition = "input.mainRB == 'plot'",               
+        condition = "input.mainRB == 'plot'",
         tags$table(style="border: 3px solid #E8E8E8; padding:2px;border-style:solid; width:100%; height: 450px;" ,
-          tags$tr(valign="top", 
+          tags$tr(valign="top",
             tags$td(
               p(),
               uiOutput("selectPlotR"),
@@ -283,38 +283,38 @@ shinyUI(fluidPage(
               p(),
               actionButton("rescaleY", label = strong("rescale Y slider")),
               actionButton("resetY", label = strong("reset Y slider"))
-              
+
             )
           )
         )
-      ) # end of the last conditional panel     
+      ) # end of the last conditional panel
     ), ## end of == sidebar panel ==
 
 ############################################################################
 ##   === MAIN PANEL ===
-    mainPanel(    
+    mainPanel(
       tabsetPanel(
-        tabPanel("Data Plot",  
+        tabPanel("Data Plot",
                  progressInit(),
                  tags$table(style="border-style:none;  width:100%",
                    tags$tr(
                      tags$td(uiOutput("progress"), align="center", style="width:70%"),
                      tags$td(uiOutput("selectBank"), align="left", style="width:30%")
                       )
-                    ), 
-                 plotOutput("dataPlot", clickId="mainClick", hoverId="mainHover", hoverDelay=50, hoverDelayType="debounce", width='750px'),
+                    ),
+                 plotOutput("dataPlot", click="mainClick", hover="mainHover", width='750px'),
                  plotOutput("legendPlot", height="20px", width='750px'),
                  uiOutput('downloadMainPlotR'),
                  plotOutput("prelimGrPlot"),
                  uiOutput('downloadestGrPlotR'),
                  uiOutput('downloadestGrDataR')),
-        tabPanel("Data Table",  
-                 downloadButton('downloadData', 'Download'), tags$hr(), 
+        tabPanel("Data Table",
+                 downloadButton('downloadData', 'Download'), tags$hr(),
                  tableOutput('datatable')),
         tabPanel("Help", includeHTML("./help/help.html")),
-        tabPanel("Fit Results Plot",  
-                 plotOutput("fitResPlot"), 
-                 uiOutput('downloadFitResPlotR'), p(), 
+        tabPanel("Fit Results Plot",
+                 plotOutput("fitResPlot"),
+                 uiOutput('downloadFitResPlotR'), p(),
                  plotOutput("GrPlot"),
                  uiOutput('downloadGrPlotR'))
       )

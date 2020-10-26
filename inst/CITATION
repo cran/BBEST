@@ -6,4 +6,4 @@ bibentry(bibtype = "Manual",
          author = c(person("Anton", "Gagin"), person("Igor", "Levin")),
          year = year,
          note = note,
-         url = "http://CRAN.R-project.org/package=BBEST")
+         url = "https://CRAN.R-project.org/package=BBEST")

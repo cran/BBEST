@@ -1,5 +1,5 @@
 \name{Internals}
-\alias{Internals} 
+\alias{Internals}
 \alias{basisMatrix}
 \alias{basisSpline}
 \alias{DMatrix}
@@ -45,12 +45,8 @@
 \alias{set.DEoptim.control}
 \alias{row.outer.product}
 \alias{covMatrixSE}
-\alias{covMatrix.DI}   
-\alias{Progress}
-\alias{progressInit}
-\alias{setProgress}
+\alias{covMatrix.DI}
 \alias{whatIsSpecified}
-\alias{withProgress}
 \docType{data}
 \alias{fpe}
 \title{Functions used internally}

@@ -2,12 +2,12 @@
 \alias{do.fit}
 \title{Estimate background}
 
-\description{\code{do.fit} estimates the bacground using the Bayesian approach and Differential Evolution algorithm.}
+\description{\code{do.fit} estimates the background using the Bayesian approach and Differential Evolution algorithm.}
 
-		   
+
 \usage{
-do.fit(data, bounds.lower, bounds.upper, scale=c(1,1), knots.x=NA, 
-       knots.n=NA, analytical=FALSE, stdev=TRUE, control=list(), p.bkg=.5, 
+do.fit(data, bounds.lower, bounds.upper, scale=c(1,1), knots.x=NA,
+       knots.n=NA, analytical=FALSE, stdev=TRUE, control=list(), p.bkg=.5,
 	   save.to="")
 }
 \arguments{
@@ -15,22 +15,22 @@ do.fit(data, bounds.lower, bounds.upper, scale=c(1,1), knots.x=NA,
   \item{bounds.lower, bounds.upper}{numerics specifying the lower and upper bounds for the fitted spline values.}
   \item{scale}{numeric vector which, if applicable, determines the bounds for the fitted scale parameter. The default value of \code{c(1,1)} means a no-scale fit. See details.}
   \item{knots.x}{numeric vector which, if not \code{NA}, specifies the knot positions.}
-  \item{knots.n}{numeric, the number of knots. If \code{knots.x} is \code{NA} then \code{knots.n} equidistant knots will be created.}  
+  \item{knots.n}{numeric, the number of knots. If \code{knots.x} is \code{NA} then \code{knots.n} equidistant knots will be created.}
   \item{analytical}{logical. If \code{TRUE} background is approximated by an analytical function \eqn{f(x)=P_1\exp(-P_2x)x^{P_3} + P_4/[(x-P_5)^2+P_6^2]}.}
   \item{stdev}{logical, whether to calculate the uncertainty for the estimated background. Should be set to \code{FALSE} if \code{analytical=TRUE}.}
-  \item{control}{list, the return value of \code{\link{set.control}}. Specifies various parameters of the Differential Evolution optimization algorithm implemented in \code{DEoptim}.}  
+  \item{control}{list, the return value of \code{\link{set.control}}. Specifies various parameters of the Differential Evolution optimization algorithm implemented in \code{DEoptim}.}
   \item{p.bkg}{numeric, the probability that a single pixel contains "only" a background.}
   \item{save.to}{character, a filename for saving the results.}
 }
 \details{
-If information on the low-r behavior of G(r) is provided, the global intensity scale  and atomic displacement parameters can be fitted along with the positions of the knots,  (\code{\link{set.Gr}}). To fit normalization parameter set bounds in \code{scale} for the desired values. To fit Atomic Displacement Parameters see \code{\link{set.SB}}. 
+If information on the low-r behavior of G(r) is provided, the global intensity scale  and atomic displacement parameters can be fitted along with the positions of the knots,  (\code{\link{set.Gr}}). To fit normalization parameter set bounds in \code{scale} for the desired values. To fit Atomic Displacement Parameters see \code{\link{set.SB}}.
 
-In most cases \code{p.bkg} should be set to its default value 0.5. 
+In most cases \code{p.bkg} should be set to its default value 0.5.
 
-For further details see \code{\link{BBEST-package}}. 
+For further details see \code{\link{BBEST-package}}.
 }
 
-\value{ 
+\value{
 A list with elements:
 \item{x}{numeric vector of grid points}
 \item{curves}{list, see below.}
@@ -65,11 +65,11 @@ Element \code{fit.details} is a list with sub-elements:
 \item{Gr}{list contacting information on the low-r behaviour of G(r) . See \code{\link{set.Gr}} for details.}
 \item{n.atoms}{numeric vector, number of different atoms per unit cell.}
 \item{scatter.length}{numeric vector, atomic scattering factors.}
-			
-						
+
+
 }
 \references{
-Ardia, D., Mullen, K., Peterson, B. & Ulrich, J. (2011): DEoptim. R Package Version 2.2-2. \url{http://CRAN.R-project.org/package=DEoptim}.
+Ardia, D., Mullen, K., Peterson, B. & Ulrich, J. (2011): DEoptim. R Package Version 2.2-2. \url{https://CRAN.R-project.org/package=DEoptim}.
 
 Mullen, K.M., Ardia, D., Gil, D., Windover, D., Cline, J. (2011): DEoptim: An R Package for Global Optimization by Differential Evolution. \emph{J. Stat. Softw.}, \bold{40}(6), 1-26. \url{https://www.jstatsoft.org/article/view/v040i06}.
 }

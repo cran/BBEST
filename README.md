@@ -12,17 +12,17 @@ citation("BBEST")
 
 ## Installation
 
-Prior to using 'BBEST', **R** software environment should be installed. The **R** environment is available for Windows, MacOS and a variety of UNIX platforms, and can be downloaded at [r-project.org](http://www.r-project.org/). Manuals for **R** listed at [cran.r-project.org/manuals](http://cran.r-project.org/manuals.html) provide a good introduction to this language.
+Prior to using 'BBEST', **R** software environment should be installed. The **R** environment is available for Windows, MacOS and a variety of UNIX platforms, and can be downloaded at [r-project.org](https://www.r-project.org/). Manuals for **R** listed at [cran.r-project.org/manuals](https://cran.r-project.org/manuals.html) provide a good introduction to this language.
 
-You may also wish to install and IDE for **R**, for example, [RStudio](http://www.rstudio.com/). 
+You may also wish to install and IDE for **R**, for example, [RStudio](https://rstudio.com/). 
 
-To install a stable version of 'BBEST' from [CRAN](http://cran.r-project.org/package=BBEST) type in the **R** command shell or in your IDE console 
+To install a stable version of 'BBEST' from [CRAN](https://cran.r-project.org/package=BBEST) type in the **R** command shell or in your IDE console 
 
 ```r
 install.packages('BBEST', dependencies = TRUE)
 ```
 
-Or download [tar ball](http://cran.r-project.org/package=BBEST/index.html), decompress the file, and run `R CMD INSTALL`. You will have to install packages: 'DEoptim', 'wmtsa', 'grid', 'ggplot2', 'reshape2', and 'shiny'.
+Or download [tar ball](https://cran.r-project.org/package=BBEST/index.html), decompress the file, and run `R CMD INSTALL`. You will have to install packages: 'DEoptim', 'aws', 'grid', 'ggplot2', 'reshape2', and 'shiny'.
 
 ## Usage
 
@@ -55,7 +55,7 @@ guide()
 
 ## Example
 
-Below is an example describing application of 'BBEST' to subtraction of an incoherent-scattering background from the neutron total scattering data collected on the powder sample of garnet Li5La3Nb2O12 using NPDF diffractometer at the Lujan Center for Neutron Scattering (see [Gagin A. & Levin I. (2014). *J. Appl. Cryst.* **47**, 2060-2068.](http://onlinelibrary.wiley.com/doi/10.1107/S1600576714023796/abstract)). The data has been preprocessed using [*PDFgetN*](http://pdfgetn.sourceforge.net/) to generate S(Q) bank by bank (the .sqa file). We also include the blended S(Q) (the .sqb file) obtained after performing initial background subtraction in 'BBEST' using individual banks. The corresponding *PDFgetN* output files can be found at
+Below is an example describing application of 'BBEST' to subtraction of an incoherent-scattering background from the neutron total scattering data collected on the powder sample of garnet Li5La3Nb2O12 using NPDF diffractometer at the Lujan Center for Neutron Scattering (see [Gagin A. & Levin I. (2014). *J. Appl. Cryst.* **47**, 2060-2068.](https://onlinelibrary.wiley.com/doi/abs/10.1107/S1600576714023796)). The data has been preprocessed using [*PDFgetN*](http://pdfgetn.sourceforge.net/) to generate S(Q) bank by bank (the .sqa file). We also include the blended S(Q) (the .sqb file) obtained after performing initial background subtraction in 'BBEST' using individual banks. The corresponding *PDFgetN* output files can be found at
 
 `"Path_to_your_R-library/extdata"`
 
@@ -64,7 +64,7 @@ To use these files with 'BBEST', delete the ".txt" extensions at the end of the 
 
 ### I. FITTING THE BACKGROUND FOR INDIVIDUAL BANKS
 
-1. Start [RStudio](http://www.rstudio.com/)
+1. Start [RStudio](https://rstudio.com/)
 
 2. Install the package by typing the following command in the Rstudio console:
 
@@ -76,6 +76,7 @@ install.packages('BBEST', dependencies = TRUE)
 
 ```r
 library(BBEST)
+library(shiny)
 ```
 
 4. Start the GUI by typing 
@@ -93,7 +94,7 @@ runUI()
 
 5. Read the data by pressing the "*Choose file*" button and selecting the *npdf_07275.sqa file*. 
 
-    The data from Bank 1 will be displayed in the plot window.  Use the pulldown menu next to the plot window to select the bank to be displayed.
+    The data from Bank 1 will be displayed in the plot window. Use the pulldown menu next to the plot window to select the bank to be displayed.
 
     The progress bar highlights letters "x" and "y" in green, which indicates that the data is ready for processing. Letters "G(r)" and "SB" are grey, indicating that these functions are optional.   Finally, "lambda", "epsilon", and "DifEv" are red, indicating that these parameters must be specified before the fit.
 
@@ -197,7 +198,7 @@ and
 fix.merge()
 ```
 
-(see [reference manual](http://cran.r-project.org/package=BBEST/index.html/BBEST.pdf).)
+(see [reference manual](https://cran.r-project.org/package=BBEST/index.html).)
 
 
 ### II. FITTING the BACKGROUND FOR A BLENDED S(Q)

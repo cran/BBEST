@@ -6,7 +6,7 @@
 \description{Function to incorporate information on the low-r  behaviour of G(r) into the Bayesian model.}
 
 \usage{
-set.Gr(data, r1=seq(0, 1, 0.005), r2=NA, rho.0, 
+set.Gr(data, r1=seq(0, 1, 0.005), r2=NA, rho.0,
        type1="gaussianNoise", type2=NA, sigma.f=NA, l=NA)
 }
 \arguments{
@@ -17,14 +17,14 @@ set.Gr(data, r1=seq(0, 1, 0.005), r2=NA, rho.0,
   \item{sigma.f, l}{numerics or numeric vectors, specify parameters for a squared-exponential covariance function.}
 }
 \details{
-\code{type1} can be either "gaussianNoise" or "correlatedNoise". G(r) is restricted to the \eqn{-4\pi\rho.0r1} line plus independent Gaussian noise or correlated Gaussian noise, respectively. 
+\code{type1} can be either "gaussianNoise" or "correlatedNoise". G(r) is restricted to the \eqn{-4\pi\rho.0r1} line plus independent Gaussian noise or correlated Gaussian noise, respectively.
 
-\code{type2} can be either "secondDeriv" or "gaussianProcess" to impose smootheness conditions over the interval \code{r2}. If \code{type2} is "secondDeriv", a minimum of the second derivative is sought. If \code{type2} is "gaussianProcess", the smoothness is controlled via the Gaussian process using parameters  sigma.f and l.
+\code{type2} can be either "secondDeriv" or "gaussianProcess" to impose smoothness conditions over the interval \code{r2}. If \code{type2} is "secondDeriv", a minimum of the second derivative is sought. If \code{type2} is "gaussianProcess", the smoothness is controlled via the Gaussian process using parameters  sigma.f and l.
 
 According to our experience, the most efficient way is to impose \code{type1="gaussianNoise"} and \code{type2=NA} conditions.
 }
 \value{
-An object of type \code{data}. 
+An object of type \code{data}.
 }
 
 \keyword{set data}
