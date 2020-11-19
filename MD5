@@ -1,11 +1,11 @@
-158262c43128c053f915c4f59fc0fb13 *ChangeLog
-011cdaa5e7f6efb12a2b96ee9e6fb6cb *DESCRIPTION
+c752b0f28a1e9ff95f4997c85e08b223 *ChangeLog
+dfb71187156890c0642662cf0b6432aa *DESCRIPTION
 66ae2fc18f02c90f1218e7a4c389d2d0 *NAMESPACE
-2605fe80dcd408028b79f0a044fd41be *NEWS.md
+59d58651e6fff03213a31fc445af714e *NEWS.md
 e711c9862a7d3adf83c7556c806addcb *R/bayesian.R
 7bdc656ec48370f5fcac488ee76043d7 *R/fits.R
-246917b9f812255c914a66e3b9c60d40 *R/guide.R
-c05ebe03a38f9a30c8f3ba634ca43625 *R/interface.R
+8573aec1e4a7cd422cf69822989b12be *R/guide.R
+f0be5bc75540913d3e56a5f795b9ddae *R/interface.R
 e23570e15e3ba8723650102ae2015a5e *R/plot.R
 decfe6574830dbc6d5529e169769e29f *R/progress.R
 58f56bdd2abf7c477c77d7f60c38450c *R/r-space.R
@@ -43,7 +43,7 @@ a92e522a47cfb80558e546bbb7dd168b *man/set.SB.Rd
 56c413d4e6f1ca56671392b6516e6318 *man/set.control.Rd
 3bf467583f81a3597d15bb8e73170397 *man/set.data.Rd
 93b6ba7e45f198c470a8d7e849d6d93e *man/set.lambda.Rd
-6be85bc04fce592b590e8779fb17b60e *man/set.sigma.Rd
+164b5938dd49c9e6ce7301a8755d39d7 *man/set.sigma.Rd
 ae3d1a8f42289a037c91112dbd3aaac5 *man/split.sqa.Rd
 883723d63a71d96bffb7eb04a467bd54 *man/test.signal.Rd
 f6cd3a2335802132e97b6f92e9d437eb *man/trim.data.Rd

@@ -181,9 +181,10 @@ trim.data <- function(data, x.min, x.max){
 
 
 ###
-set.sigma <- function(data, sigma=NA, x.bkg.only=NA, n.regions=10, hmax=250, sigma2=0.1){
+set.sigma <- function(data, sigma=NA, x.bkg.only=NA, n.regions=10, hmax=250, sigma2=c(0.1)){
   y.smoothed <- NA
   k <- hmax
+  if(length(sigma2) == 1) sigma2 <- rep(sigma2, n.regions)
 
   if(is.na(sigma[1])){
     if(is.na(x.bkg.only[1])){
@@ -197,7 +198,7 @@ set.sigma <- function(data, sigma=NA, x.bkg.only=NA, n.regions=10, hmax=250, sig
         cat("\n step ", i, " of ", n.regions, "\n\n")
         if(i==n.regions)
           x.bkg.i <- x.bkg.i[1]:length(data$x)
-        y.sm <- aws::aws(data$y[x.bkg.i], hmax=k[i], sigma2 = sigma2)@theta
+        y.sm <- aws::aws(data$y[x.bkg.i], hmax=k[i], sigma2 = sigma2[i])@theta
         sig <- sqrt(mean((y.sm-data$y[x.bkg.i])^2))
         sigma <- c(sigma, rep(sig, length(x.bkg.i)))
         y.smoothed <- c(y.smoothed, y.sm)
@@ -210,7 +211,7 @@ set.sigma <- function(data, sigma=NA, x.bkg.only=NA, n.regions=10, hmax=250, sig
       x.min.i <- which(abs(data$x-x.bkg.only[1])==min(abs(data$x-x.bkg.only[1])))
       x.max.i <- which(abs(data$x-x.bkg.only[2])==min(abs(data$x-x.bkg.only[2])))
       x.bkg.i <- x.min.i:x.max.i
-      y.smoothed <- aws::aws(data$y[x.bkg.i], hmax=k, sigma2 = sigma2)@theta
+      y.smoothed <- aws::aws(data$y[x.bkg.i], hmax=k, sigma2 = sigma2[1])@theta
       sigma <- rep(sqrt(mean((y.smoothed-data$y[x.bkg.i])^2)), length(data$x))
       y.smoothed <- c(data$y[1:(x.min.i-1)], y.smoothed, data$y[(x.max.i+1):length(data$x)])
     }

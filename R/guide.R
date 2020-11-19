@@ -310,13 +310,13 @@ step6 <- function(dat){
   cat("Please type estimated error variance or leave it empty: \n")
   sigma2 <- scan("")
   if(length(sigma2) == 0)
-    sigma2 <- 0.1
+    sigma2 <- c(0.1)
 
   if(length(step6)==1)
     dat <- set.sigma(dat, n.regions=step6, sigma2 = sigma2)
 
   if(length(step6)==2)
-    dat <- set.sigma(dat, x.bkg.only=step6, sigma2 = sigma2)
+    dat <- set.sigma(dat, x.bkg.only=step6, sigma2 = sigma2[1])
   return(dat)
 }
 

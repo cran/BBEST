@@ -8,7 +8,7 @@ Set the experimental uncertainty
 This function either sets the pointwise experimental uncertainty or estimates it using \code{aws} library.
 }
 \usage{
-set.sigma(data, sigma=NA, x.bkg.only=NA, n.regions=10, hmax=250, sigma2=0.1)
+set.sigma(data, sigma=NA, x.bkg.only=NA, n.regions=10, hmax=250, sigma2=c(0.1))
 }
 
 \arguments{
