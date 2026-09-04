@@ -14,7 +14,7 @@ citation("BBEST")
 
 Prior to using 'BBEST', **R** software environment should be installed. The **R** environment is available for Windows, MacOS and a variety of UNIX platforms, and can be downloaded at [r-project.org](https://www.r-project.org/). Manuals for **R** listed at [cran.r-project.org/manuals](https://cran.r-project.org/manuals.html) provide a good introduction to this language.
 
-You may also wish to install and IDE for **R**, for example, [RStudio](https://rstudio.com/). 
+You may also wish to install and IDE for **R**, for example, [RStudio](https://posit.co/). 
 
 To install a stable version of 'BBEST' from [CRAN](https://cran.r-project.org/package=BBEST) type in the **R** command shell or in your IDE console 
 
@@ -55,7 +55,7 @@ guide()
 
 ## Example
 
-Below is an example describing application of 'BBEST' to subtraction of an incoherent-scattering background from the neutron total scattering data collected on the powder sample of garnet Li5La3Nb2O12 using NPDF diffractometer at the Lujan Center for Neutron Scattering (see [Gagin A. & Levin I. (2014). *J. Appl. Cryst.* **47**, 2060-2068.](https://onlinelibrary.wiley.com/doi/abs/10.1107/S1600576714023796)). The data has been preprocessed using [*PDFgetN*](http://pdfgetn.sourceforge.net/) to generate S(Q) bank by bank (the .sqa file). We also include the blended S(Q) (the .sqb file) obtained after performing initial background subtraction in 'BBEST' using individual banks. The corresponding *PDFgetN* output files can be found at
+Below is an example describing application of 'BBEST' to subtraction of an incoherent-scattering background from the neutron total scattering data collected on the powder sample of garnet Li5La3Nb2O12 using NPDF diffractometer at the Lujan Center for Neutron Scattering (see [Gagin A. & Levin I. (2014). *J. Appl. Cryst.* **47**, 2060-2068.](https://onlinelibrary.wiley.com/doi/abs/10.1107/S1600576714023796)). The data has been preprocessed using [*PDFgetN*](https://pdfgetn.sourceforge.net/) to generate S(Q) bank by bank (the .sqa file). We also include the blended S(Q) (the .sqb file) obtained after performing initial background subtraction in 'BBEST' using individual banks. The corresponding *PDFgetN* output files can be found at
 
 `"Path_to_your_R-library/extdata"`
 
@@ -64,7 +64,7 @@ To use these files with 'BBEST', delete the ".txt" extensions at the end of the 
 
 ### I. FITTING THE BACKGROUND FOR INDIVIDUAL BANKS
 
-1. Start [RStudio](https://rstudio.com/)
+1. Start [RStudio](https://posit.co/)
 
 2. Install the package by typing the following command in the Rstudio console:
 

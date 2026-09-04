@@ -91,6 +91,10 @@ progressInit <- function() {
 #'   })
 #' })
 #' }
+#' @usage
+#' \special{Progress$new(session, min = 0, max = 1)}
+#' \special{progress$set(message = NULL, detail = NULL, value = NULL)}
+#' \special{progress$close()}
 #' @seealso \code{\link{progressInit}}, \code{\link{withProgress}}
 #' @rdname Progress
 #' @export

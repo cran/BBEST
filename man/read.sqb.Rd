@@ -14,7 +14,7 @@ read.sqb(file = stop("'file' must be specified"))
 \references{
 Peterson, P.F., Gutmann, M., Proffen, TH. & Billinge, S.J.L. (2000): PDFgetN: A User-Friendly Program to Extract the Total Scattering Structure Function and the Pair Distribution Function from Neutron Powder Diffraction Data. \emph{J. Appl. Cryst.}, \bold{33}, 1192. \url{https://web.pa.msu.edu/cmp/billinge-group/programs/pdfgetn/pdfgetn_jac.pdf}.
 
-Proffen, TH., Peterson, P.F., Gutmann, M. & Billinge, S.J.L. (2009): PDFgetN Users Guide Version 1.6.6. \url{http://pdfgetn.sourceforge.net/}.
+Proffen, TH., Peterson, P.F., Gutmann, M. & Billinge, S.J.L. (2009): PDFgetN Users Guide Version 1.6.6. \url{https://pdfgetn.sourceforge.net/}.
 }
 
 \value{An object of type \code{data}. See \code{\link{set.data}} for details.}

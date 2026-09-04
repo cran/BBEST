@@ -1,3 +1,11 @@
+2026-09-04  Anton Gagin <av.gagin@gmail.com>
+        * Version 0.1-9
+        * DESCRIPTION: added Authors@R; dropped LazyData (no data/ directory).
+        * man/runUI.Rd: restored lost \bold{R} markup.
+        * man/Progress.Rd: added \usage for documented arguments.
+        * man/read.sqa.Rd, man/read.sqb.Rd: https URL for PDFgetN.
+        * README.md: update RStudio URL to posit.co.
+
 2020-13-11  Anton Gagin <av.gagin@gmail.com>
         * Version 0.1-8
         * R/interface.R: fixed bug in set.sigma() when providing more than one noise estimation level leads to crashing.

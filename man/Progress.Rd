@@ -5,6 +5,11 @@
 \alias{Progress-class}
 \alias{Progress}
 \title{Reporting progress (object-oriented API)}
+\usage{
+\special{Progress$new(session, min = 0, max = 1)}
+\special{progress$set(message = NULL, detail = NULL, value = NULL)}
+\special{progress$close()}
+}
 \arguments{
 \item{session}{The Shiny session object, as provided by
 \code{shinyServer} to the server function.}
